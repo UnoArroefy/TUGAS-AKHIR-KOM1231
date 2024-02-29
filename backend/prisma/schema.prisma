@@ -1,0 +1,71 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Mahasiswa {
+  id           String            @id @default(uuid())
+  nama         String
+  nim          String            @unique
+  email        String            @unique
+  password     String
+  role         role              @default(User)
+  mataKuliahId String
+  mataKuliah   MataKuliah        @relation(fields: [mataKuliahId], references: [id])
+  jadwal       JadwalMahasiswa[]
+  posts        Posts[]
+}
+
+model MataKuliah {
+  id        String             @id @default(uuid())
+  nama      String
+  kode      String
+  sks       Int
+  mahasiswa Mahasiswa[]
+  jadwal    JadwalMataKuliah[]
+}
+
+model JadwalMataKuliah {
+  id           String            @id @default(uuid())
+  mataKuliahId String
+  mataKuliah   MataKuliah        @relation(fields: [mataKuliahId], references: [id])
+  hari         String
+  jam          String
+  ruangan      String
+  dosen        String
+  mahasiswa    JadwalMahasiswa[]
+}
+
+model JadwalMahasiswa {
+  id          String           @id @default(uuid())
+  mahasiswaId String
+  mahasiswa   Mahasiswa        @relation(fields: [mahasiswaId], references: [id])
+  jadwalId    String
+  jadwal      JadwalMataKuliah @relation(fields: [jadwalId], references: [id])
+  Posts       Posts[]
+}
+
+model Posts {
+  id        String            @id @default(uuid())
+  title     String
+  jadwal    JadwalMahasiswa[]
+  createdAt DateTime          @default(now())
+  author    Mahasiswa         @relation(fields: [authorId], references: [id])
+  authorId  String
+  match     Boolean           @default(false)
+}
+
+enum role {
+  User
+  Admin
+}
