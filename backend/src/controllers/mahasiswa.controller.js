@@ -1,11 +1,11 @@
-const {
+import {
     getMahasiswaAll,
     getMahasiswabyId,
     createMahasiswa,
     deleteMahasiswa
-} = require("../services/mahasiswa.service");
+} from "../services/mahasiswa.service.js";
 
-const getMahasiswaAllController = async (req, res) => {
+export const getMahasiswaAllController = async (req, res) => {
     const mahasiswa = await getMahasiswaAll();
     if (!mahasiswa.length) {
         return res.status(404).json({ message: "No Mahasiswa yet" });
@@ -13,7 +13,7 @@ const getMahasiswaAllController = async (req, res) => {
     return res.status(200).json(mahasiswa);
 }
 
-const getMahasiswabyIdController = async (req, res) => {
+export const getMahasiswabyIdController = async (req, res) => {
     const id = req.params.id;
     const mahasiswa = await getMahasiswabyId(id);
     if (!mahasiswa.length) {
@@ -22,7 +22,7 @@ const getMahasiswabyIdController = async (req, res) => {
     return res.status(200).json(mahasiswa);
 }
 
-const createMahasiswaController = async (req, res) => {
+export const createMahasiswaController = async (req, res) => {
     const data = req.body;
     if (!data.nama || !data.nim || !data.email || !data.password) {
         return res.status(404).json({ message: "Invalid input" });
@@ -36,7 +36,7 @@ const createMahasiswaController = async (req, res) => {
     }
 };
 
-const deleteMahasiswaController = async (req, res) => {
+export const deleteMahasiswaController = async (req, res) => {
     const id = req.params.id;
     const mahasiswa = await deleteMahasiswa(id);
     if (!mahasiswa.length) {
@@ -44,10 +44,3 @@ const deleteMahasiswaController = async (req, res) => {
     }
     return res.status(200).json({ message: "Mahasiswa deleted successfully" });
 };
-
-module.exports = {
-    getMahasiswaAllController,
-    getMahasiswabyIdController,
-    createMahasiswaController,
-    deleteMahasiswaController
-}

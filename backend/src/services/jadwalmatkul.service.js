@@ -1,6 +1,6 @@
-const prisma = require("../db");
+import prisma from "../db/index.js";
 
-const getJadwalAll = async () => {
+export const getJadwalAll = async () => {
     const jadwal = await prisma.jadwalMataKuliah.findMany({
         include: {
             mataKuliah: true
@@ -9,7 +9,7 @@ const getJadwalAll = async () => {
     return jadwal;
 }
 
-const createJadwal = async (data) => {
+export const createJadwal = async (data) => {
     const jadwal = await prisma.jadwalMataKuliah.create({
         data: {
             mataKuliah: { connect: { id: data.mataKuliahId } },
@@ -21,7 +21,7 @@ const createJadwal = async (data) => {
     return jadwal;
 }
 
-const getJadwalbyMatkulId = async (id) => {
+export const getJadwalbyMatkulId = async (id) => {
     const jadwal = await prisma.jadwalMataKuliah.findMany({
         where: {
             mataKuliahId: id
@@ -31,10 +31,4 @@ const getJadwalbyMatkulId = async (id) => {
         }
     });
     return jadwal;
-}
-
-module.exports = {
-    getJadwalAll,
-    createJadwal,
-    getJadwalbyMatkulId
 }

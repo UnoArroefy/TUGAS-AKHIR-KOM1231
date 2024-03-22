@@ -1,11 +1,11 @@
-const {
+import {
     getMatkulAll,
     getMatkulbyId,
     createMatkul,
     deleteMatkulbyId,
-} = require("../services/matkul.service");
+} from "../services/matkul.service.js";
 
-const getMatkulAllController = async (req, res) => {
+export const getMatkulAllController = async (req, res) => {
     const matkuls = await getMatkulAll();
     if (!matkuls) {
         return res.status(404).json({ message: "Matkul not found" });
@@ -13,7 +13,7 @@ const getMatkulAllController = async (req, res) => {
     return res.status(200).json(matkuls);
 };
 
-const getMatkulbyIdController = async (req, res) => {
+export const getMatkulbyIdController = async (req, res) => {
     const id = req.params.id;
     const matkul = await getMatkulbyId(id);
     if (!matkul) {
@@ -22,7 +22,7 @@ const getMatkulbyIdController = async (req, res) => {
     return res.status(200).json(matkul);
 };
 
-const createMatkulController = async (req, res) => {
+export const createMatkulController = async (req, res) => {
     const data = req.body;
     data.sks = parseInt(data.sks);
     console.log(data.sks)
@@ -38,7 +38,7 @@ const createMatkulController = async (req, res) => {
     }
 };
 
-const deleteMatkulController = async (req, res) => {
+export const deleteMatkulController = async (req, res) => {
     const id = req.params.id;
     const matkul = await deleteMatkulbyId(id);
     if (!matkul) {
@@ -46,10 +46,3 @@ const deleteMatkulController = async (req, res) => {
     }
     return res.status(200).json({ message: "Matkul deleted successfully"});
 };
-
-module.exports = {
-    getMatkulAllController,
-    getMatkulbyIdController,
-    createMatkulController,
-    deleteMatkulController
-}

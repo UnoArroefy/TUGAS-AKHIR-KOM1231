@@ -1,11 +1,11 @@
-const prisma = require("../db");
+import prisma from "../db/index.js";
 
-const getMatkulAll = async () => {
+export const getMatkulAll = async () => {
     const mataKuliah = await prisma.mataKuliah.findMany();
     return mataKuliah;
 };
 
-const getMatkulbyId = async (id) => {
+export const getMatkulbyId = async (id) => {
     const mataKuliah = await prisma.mataKuliah.findUnique({
         where: {
             id,
@@ -14,7 +14,7 @@ const getMatkulbyId = async (id) => {
     return mataKuliah;
 }
 
-const createMatkul = async (data) => {
+export const createMatkul = async (data) => {
     const mataKuliah = await prisma.mataKuliah.create({
         data: {
             nama: data.nama,
@@ -25,7 +25,7 @@ const createMatkul = async (data) => {
     return mataKuliah
 }
 
-const deleteMatkulbyId = async (id) => {
+export const deleteMatkulbyId = async (id) => {
     const deleteMatkul = await prisma.mataKuliah.delete({
         where: {
             id,
@@ -34,7 +34,7 @@ const deleteMatkulbyId = async (id) => {
     return deleteMatkul;
 }
 
-const updateMatkul = async (id, data) => {
+export const updateMatkul = async (id, data) => {
     const mataKuliah = await prisma.mataKuliah.update({
         where: {
             id,
@@ -48,7 +48,7 @@ const updateMatkul = async (id, data) => {
     return mataKuliah;
 }
 
-const updateMatkulPartial = async (id, data) => {
+export const updateMatkulPartial = async (id, data) => {
     const mataKuliah = await prisma.mataKuliah.update({
         where: {
             id,
@@ -58,13 +58,4 @@ const updateMatkulPartial = async (id, data) => {
         }
     });
     return mataKuliah;
-}
-
-module.exports ={
-    getMatkulAll,
-    getMatkulbyId,
-    createMatkul,
-    deleteMatkulbyId,
-    updateMatkul,
-    updateMatkulPartial
 }

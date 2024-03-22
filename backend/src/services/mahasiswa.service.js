@@ -1,11 +1,11 @@
-const prisma = require("../db");
+import prisma from "../db/index.js";
 
-const getMahasiswaAll = async () => {
+export const getMahasiswaAll = async () => {
     const mahasiswa = await prisma.mahasiswa.findMany();
     return mahasiswa;
 }
 
-const getMahasiswabyId = async (id) => {
+export const getMahasiswabyId = async (id) => {
     const mahasiswa = await prisma.mahasiswa.findUnique({
         where: {
             id,
@@ -14,7 +14,7 @@ const getMahasiswabyId = async (id) => {
     return mahasiswa;
 }
 
-const createMahasiswa = async (data) => {
+export const createMahasiswa = async (data) => {
     const mahasiswa = await prisma.mahasiswa.create({
         data: {
             nama: data.nama,
@@ -26,7 +26,7 @@ const createMahasiswa = async (data) => {
     return mahasiswa
 }
 
-const deleteMahasiswa = async (id) => {
+export const deleteMahasiswa = async (id) => {
     const deleteMahasiswa = await prisma.mahasiswa.delete({
         where: {
             id,
@@ -35,7 +35,7 @@ const deleteMahasiswa = async (id) => {
     return deleteMahasiswa;
 }
 
-const updateMahasiswa = async (id, data) => {
+export const updateMahasiswa = async (id, data) => {
     const mahasiswa = await prisma.mahasiswa.update({
         where: {
             id,
@@ -50,7 +50,7 @@ const updateMahasiswa = async (id, data) => {
     return mahasiswa;
 }
 
-const updateMahsiswaPartial = async (id, data) => {
+export const updateMahsiswaPartial = async (id, data) => {
     const mahasiswa = await prisma.mahasiswa.update({
         where: {
             id,
@@ -60,13 +60,4 @@ const updateMahsiswaPartial = async (id, data) => {
         }
     });
     return mahasiswa;
-}
-
-module.exports = {
-    getMahasiswaAll,
-    getMahasiswabyId,
-    createMahasiswa,
-    deleteMahasiswa,
-    updateMahasiswa,
-    updateMahsiswaPartial,
 }

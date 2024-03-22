@@ -1,14 +1,14 @@
-const express = require("express");
-
-const router = express.Router();
-
-const {
+import { Router } from "express";
+import {
     getJadwalAllController,
     createJadwalController,
     getJadwalbyMatkulIdController
-} = require("../controllers/jadwalmatkul.controller");
+} from "../controllers/jadwalmatkul.controller.js";
+
+const router = Router();
 
 router.get("/", getJadwalAllController);
 router.post("/", createJadwalController);
 router.get("/:id", getJadwalbyMatkulIdController);
-module.exports = router;
+
+export default router;

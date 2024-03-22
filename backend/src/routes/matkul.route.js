@@ -1,17 +1,16 @@
-const express = require("express");
-
-const router = express.Router();
-
-const {
+import { Router } from "express";
+import {
     getMatkulAllController,
     getMatkulbyIdController,
     createMatkulController,
     deleteMatkulController,
-} = require("../controllers/matkul.controller");
+} from "../controllers/matkul.controller.js";
+
+const router = Router();
 
 router.get("/", getMatkulAllController);
 router.get("/:id", getMatkulbyIdController);
 router.post("/", createMatkulController);
 router.delete("/:id", deleteMatkulController);
 
-module.exports = router;
+export default router;

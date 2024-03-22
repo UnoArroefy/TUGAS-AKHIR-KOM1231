@@ -1,6 +1,6 @@
-const { getJadwalAll, createJadwal, getJadwalbyMatkulId } = require("../services/jadwalmatkul.service");
+import { getJadwalAll, createJadwal, getJadwalbyMatkulId } from "../services/jadwalmatkul.service.js";
 
-const getJadwalAllController = async (req, res) => {
+export const getJadwalAllController = async (req, res) => {
     const jadwal = await getJadwalAll();
     if (!jadwal.length) {
         return res.status(404).json({ message: "No Jadwal yet" });
@@ -8,7 +8,7 @@ const getJadwalAllController = async (req, res) => {
     return res.status(200).json(jadwal);
 }
 
-const createJadwalController = async (req, res) => {
+export const createJadwalController = async (req, res) => {
     const data = req.body;
     if (!data.mataKuliahId || !data.hari || !data.jam || !data.ruangan) {
         return res.status(404).json({ message: "Invalid input" });
@@ -22,17 +22,11 @@ const createJadwalController = async (req, res) => {
     }
 }
 
-const getJadwalbyMatkulIdController = async (req, res) => {
+export const getJadwalbyMatkulIdController = async (req, res) => {
     const id = req.params.id;
     const jadwal = await getJadwalbyMatkulId(id);
     if (!jadwal.length) {
         return res.status(404).json({ message: "Jadwal not found" });
     }
     return res.status(200).json(jadwal);
-}
-
-module.exports = {
-    getJadwalAllController,
-    createJadwalController,
-    getJadwalbyMatkulIdController
 }

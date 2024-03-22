@@ -1,17 +1,16 @@
-const express = require("express");
-
-const router = express.Router();
-
-const {
+import { Router } from "express";
+import {
     getMahasiswaAllController,
     getMahasiswabyIdController,
     createMahasiswaController,
     deleteMahasiswaController,
-} = require("../controllers/mahasiswa.controller");
+} from "../controllers/mahasiswa.controller.js";
+
+const router = Router();
 
 router.get("/", getMahasiswaAllController);
 router.get("/:id", getMahasiswabyIdController);
 router.post("/", createMahasiswaController);
 router.delete("/:id", deleteMahasiswaController);
 
-module.exports = router;
+export default router;

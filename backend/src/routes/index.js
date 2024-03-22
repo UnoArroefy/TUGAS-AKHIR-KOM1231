@@ -1,14 +1,12 @@
-const express = require("express");
+import { Router } from "express";
+import matkul from "./matkul.route.js";
+import mahasiswa from "./mahasiswa.route.js";
+import jadwalmatkul from "./jadwalmatkul.route.js";
 
-const router = express.Router();
+const router = Router();
 
-const matkul = require("./matkul.route");
 router.use("/matkul", matkul);
-
-const mahasiswa = require("./mahasiswa.route");
 router.use("/mahasiswa", mahasiswa);
-
-const jadwalmatkul = require("./jadwalmatkul.route");
 router.use("/jadwalmatkul", jadwalmatkul);
 
-module.exports = router;
+export default router;

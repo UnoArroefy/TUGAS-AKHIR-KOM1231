@@ -1,6 +1,7 @@
 {
   "name": "tugas-akhir-kom1231",
   "version": "1.0.0",
+  "type": "module",
   "description": "tugas akhir mata kuliah rekayasa perangkat lunak",
   "main": "./src/app.js",
   "scripts": {
