@@ -34,9 +34,37 @@ const deleteMatkulbyId = async (id) => {
     return deleteMatkul;
 }
 
+const updateMatkul = async (id, data) => {
+    const mataKuliah = await prisma.mataKuliah.update({
+        where: {
+            id,
+        },
+        data: {
+            nama: data.nama,
+            kode: data.kode,
+            sks: data.sks,
+        }
+    });
+    return mataKuliah;
+}
+
+const updateMatkulPartial = async (id, data) => {
+    const mataKuliah = await prisma.mataKuliah.update({
+        where: {
+            id,
+        },
+        data: {
+            ...data,
+        }
+    });
+    return mataKuliah;
+}
+
 module.exports ={
     getMatkulAll,
     getMatkulbyId,
     createMatkul,
     deleteMatkulbyId,
+    updateMatkul,
+    updateMatkulPartial
 }

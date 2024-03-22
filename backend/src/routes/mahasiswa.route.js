@@ -2,8 +2,16 @@ const express = require("express");
 
 const router = express.Router();
 
-router.get("/", (req, res) => {
-    res.send("this is the home page");
-});
+const {
+    getMahasiswaAllController,
+    getMahasiswabyIdController,
+    createMahasiswaController,
+    deleteMahasiswaController,
+} = require("../controllers/mahasiswa.controller");
+
+router.get("/", getMahasiswaAllController);
+router.get("/:id", getMahasiswabyIdController);
+router.post("/", createMahasiswaController);
+router.delete("/:id", deleteMahasiswaController);
 
 module.exports = router;

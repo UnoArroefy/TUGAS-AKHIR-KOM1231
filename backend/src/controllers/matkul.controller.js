@@ -27,14 +27,14 @@ const createMatkulController = async (req, res) => {
     data.sks = parseInt(data.sks);
     console.log(data.sks)
     if (!data.nama || !data.kode || !data.sks) {
-        return res.status(400).send("Invalid input");
+        return res.status(404).json({ message: "Invalid input" });
     }
 
     try {
         await createMatkul(data);
-        res.status(200).send("Mata Kuliah created successfully ");
+        res.status(200).json({ message: "Mata Kuliah created successfully "});
     } catch (error) {
-        res.status(500).send("Internal Server Error " + error);
+        res.status(500).json({ message: "Internal Server Error, " + error});
     }
 };
 
@@ -44,7 +44,7 @@ const deleteMatkulController = async (req, res) => {
     if (!matkul) {
         return res.status(404).json({ message: "Matkul not found" });
     }
-    return res.status(200).send("Matkul deleted successfully");
+    return res.status(200).json({ message: "Matkul deleted successfully"});
 };
 
 module.exports = {

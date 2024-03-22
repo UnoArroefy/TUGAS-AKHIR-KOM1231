@@ -14,25 +14,23 @@ datasource db {
 }
 
 model Mahasiswa {
-  id           String            @id @default(uuid())
-  nama         String
-  nim          String            @unique
-  email        String            @unique
-  password     String
-  role         role              @default(User)
-  mataKuliahId String
-  mataKuliah   MataKuliah        @relation(fields: [mataKuliahId], references: [id])
-  jadwal       JadwalMahasiswa[]
-  posts        Posts[]
+  id       String            @id @default(uuid())
+  nama     String
+  nim      String            @unique
+  email    String            @unique
+  password String
+  role     role              @default(User)
+  jadwal   JadwalMahasiswa[]
+  posts    Posts[]
+  offer    offer[]
 }
 
 model MataKuliah {
-  id        String             @id @default(uuid())
-  nama      String
-  kode      String
-  sks       Int
-  mahasiswa Mahasiswa[]
-  jadwal    JadwalMataKuliah[]
+  id     String             @id @default(uuid())
+  nama   String             @unique
+  kode   String             @unique
+  sks    Int
+  jadwal JadwalMataKuliah[]
 }
 
 model JadwalMataKuliah {
@@ -42,7 +40,6 @@ model JadwalMataKuliah {
   hari         String
   jam          String
   ruangan      String
-  dosen        String
   mahasiswa    JadwalMahasiswa[]
 }
 
@@ -63,6 +60,16 @@ model Posts {
   author    Mahasiswa         @relation(fields: [authorId], references: [id])
   authorId  String
   match     Boolean           @default(false)
+  offer     offer[]
+}
+
+model offer {
+  id          String    @id @default(uuid())
+  mahasiswa   Mahasiswa @relation(fields: [mahasiswaId], references: [id])
+  mahasiswaId String
+  post        Posts     @relation(fields: [postId], references: [id])
+  postId      String
+  match       Boolean
 }
 
 enum role {

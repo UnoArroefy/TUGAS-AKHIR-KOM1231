@@ -35,9 +35,38 @@ const deleteMahasiswa = async (id) => {
     return deleteMahasiswa;
 }
 
+const updateMahasiswa = async (id, data) => {
+    const mahasiswa = await prisma.mahasiswa.update({
+        where: {
+            id,
+        },
+        data: {
+            nama: data.nama,
+            nim: data.nim,
+            email: data.email,
+            password: data.password,
+        }
+    });
+    return mahasiswa;
+}
+
+const updateMahsiswaPartial = async (id, data) => {
+    const mahasiswa = await prisma.mahasiswa.update({
+        where: {
+            id,
+        },
+        data: {
+            ...data,
+        }
+    });
+    return mahasiswa;
+}
+
 module.exports = {
     getMahasiswaAll,
     getMahasiswabyId,
     createMahasiswa,
-    deleteMahasiswa
+    deleteMahasiswa,
+    updateMahasiswa,
+    updateMahsiswaPartial,
 }
