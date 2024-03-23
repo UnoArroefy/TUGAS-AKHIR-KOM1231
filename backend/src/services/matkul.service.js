@@ -14,6 +14,24 @@ export const getMatkulbyId = async (id) => {
     return mataKuliah;
 }
 
+export const getMatkulbyKode = async (kode) => {
+    const mataKuliah = await prisma.mataKuliah.findUnique({
+        where: {
+            kode,
+        }
+    });
+    return mataKuliah;
+}
+
+export const getMatkulbyNama = async (nama) => {
+    const mataKuliah = await prisma.mataKuliah.findUnique({
+        where: {
+            nama,
+        }
+    });
+    return mataKuliah;
+}
+
 export const createMatkul = async (data) => {
     const mataKuliah = await prisma.mataKuliah.create({
         data: {

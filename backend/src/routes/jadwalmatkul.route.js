@@ -2,13 +2,15 @@ import { Router } from "express";
 import {
     getJadwalAllController,
     createJadwalController,
-    getJadwalbyMatkulIdController
+    getJadwalbyMatkulIdController,
+    deleteJadwalController,
 } from "../controllers/jadwalmatkul.controller.js";
 
 const router = Router();
 
 router.get("/", getJadwalAllController);
-router.post("/", createJadwalController);
 router.get("/:id", getJadwalbyMatkulIdController);
+router.post("/", createJadwalController);
+router.delete("/:id", deleteJadwalController);
 
 export default router;

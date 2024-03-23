@@ -14,13 +14,28 @@ export const getMahasiswabyId = async (id) => {
     return mahasiswa;
 }
 
+export const getMahasiswabyNIM = async (nim) => {
+    const mahasiswa = await prisma.mahasiswa.findUnique({
+        where: {
+            nim,
+        }
+    });
+    return mahasiswa;
+}
+
+export const getMahasiswabyEmail = async (email) => {
+    const mahasiswa = await prisma.mahasiswa.findUnique({
+        where: {
+            email,
+        }
+    });
+    return mahasiswa;
+}
+
 export const createMahasiswa = async (data) => {
     const mahasiswa = await prisma.mahasiswa.create({
         data: {
-            nama: data.nama,
-            nim: data.nim,
-            email: data.email,
-            password: data.password,
+            ...data,
         }
     });
     return mahasiswa

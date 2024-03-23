@@ -32,3 +32,21 @@ export const getJadwalbyMatkulId = async (id) => {
     });
     return jadwal;
 }
+
+export const getJadwalbyId = async (id) => {
+    const jadwal = await prisma.jadwalMataKuliah.findUnique({
+        where: {
+            id,
+        }
+    });
+    return jadwal;
+}
+
+export const deleteJadwal = async (id) => {
+    const deleteJadwal = await prisma.jadwalMataKuliah.delete({
+        where: {
+            id,
+        }
+    });
+    return deleteJadwal;
+}

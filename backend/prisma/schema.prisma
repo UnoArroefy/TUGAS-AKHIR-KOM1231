@@ -36,7 +36,7 @@ model MataKuliah {
 model JadwalMataKuliah {
   id           String            @id @default(uuid())
   mataKuliahId String
-  mataKuliah   MataKuliah        @relation(fields: [mataKuliahId], references: [id])
+  mataKuliah   MataKuliah        @relation(fields: [mataKuliahId], references: [id], onDelete: Cascade)
   hari         String
   jam          String
   ruangan      String
