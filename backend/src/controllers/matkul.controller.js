@@ -11,7 +11,7 @@ import { createMatkulValidation } from "../validations/matkul.validation.js";
 
 export const getMatkulAllController = async (req, res) => {
     const matkuls = await getMatkulAll();
-    if (!matkuls) {
+    if (!matkuls.length) {
         return res.status(404).json({ message: "No records available at the moment" });
     }
     return res.status(200).json(matkuls);

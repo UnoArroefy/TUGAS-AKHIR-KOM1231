@@ -46,10 +46,11 @@ model JadwalMataKuliah {
 model JadwalMahasiswa {
   id          String           @id @default(uuid())
   mahasiswaId String
-  mahasiswa   Mahasiswa        @relation(fields: [mahasiswaId], references: [id])
+  mahasiswa   Mahasiswa        @relation(fields: [mahasiswaId], references: [id], onDelete: Cascade)
   jadwalId    String
-  jadwal      JadwalMataKuliah @relation(fields: [jadwalId], references: [id])
+  jadwal      JadwalMataKuliah @relation(fields: [jadwalId], references: [id], onDelete: Cascade)
   Posts       Posts[]
+  @@unique([mahasiswaId, jadwalId])
 }
 
 model Posts {
@@ -57,7 +58,7 @@ model Posts {
   title     String
   jadwal    JadwalMahasiswa[]
   createdAt DateTime          @default(now())
-  author    Mahasiswa         @relation(fields: [authorId], references: [id])
+  author    Mahasiswa         @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId  String
   match     Boolean           @default(false)
   offer     offer[]
@@ -65,9 +66,9 @@ model Posts {
 
 model offer {
   id          String    @id @default(uuid())
-  mahasiswa   Mahasiswa @relation(fields: [mahasiswaId], references: [id])
+  mahasiswa   Mahasiswa @relation(fields: [mahasiswaId], references: [id], onDelete: Cascade)
   mahasiswaId String
-  post        Posts     @relation(fields: [postId], references: [id])
+  post        Posts     @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId      String
   match       Boolean
 }

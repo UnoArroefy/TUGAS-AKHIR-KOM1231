@@ -3,7 +3,11 @@ import prisma from "../db/index.js";
 export const getJadwalAll = async () => {
     const jadwal = await prisma.jadwalMataKuliah.findMany({
         include: {
-            mataKuliah: true
+            mataKuliah: {
+                select: {
+                    nama: true,
+                }
+            }
         }
     });
     return jadwal;

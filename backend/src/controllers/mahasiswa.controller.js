@@ -20,7 +20,7 @@ export const getMahasiswaAllController = async (req, res) => {
 export const getMahasiswabyIdController = async (req, res) => {
     const id = req.params.id;
     const mahasiswa = await getMahasiswabyId(id);
-    if (!mahasiswa.length) {
+    if (!mahasiswa) {
         return res.status(404).json({ message: "Mahasiswa not found" });
     }
     return res.status(200).json(mahasiswa);
