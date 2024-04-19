@@ -10,7 +10,6 @@ import { getMatkulbyKode } from "../services/matkul.service.js";
 import { createPostValidation } from "../validations/post.validation.js";
 import { getJadwalMahasiswaById } from "../services/jadwalmahasiswa.service.js";
 import { getMahasiswabyId } from "../services/mahasiswa.service.js";
-import { deleteAllOfferofPost } from "../services/offer.service.js";
 
 
 export const getPostAllController = async (req, res) => {
@@ -94,7 +93,6 @@ export const deletePostController = async (req, res) => {
         return res.status(404).json({ message: "Post not found" });
     }
     try {
-        await deleteAllOfferofPost(id);
         await deletePost(id);
         res.status(200).json({ message: "Post deleted successfully "});
     } catch (error) {

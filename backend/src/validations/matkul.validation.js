@@ -7,7 +7,7 @@ export const createMatkulValidation = (data) => {
             .required(),
         kode: joi.string()
             .trim()
-            .regex(/^[A-Z]*\d*$/)
+            .regex(/^[A-Z]*\d*[A-Z]?$/)
             .message('Invalid kode mata kuliah')
             .required(),
         sks: joi.number()

@@ -50,6 +50,8 @@ model JadwalMahasiswa {
   jadwalId    String
   jadwal      JadwalMataKuliah @relation(fields: [jadwalId], references: [id], onDelete: Cascade)
   Posts       Posts[]
+  offer       offer[]
+
   @@unique([mahasiswaId, jadwalId])
 }
 
@@ -60,17 +62,18 @@ model Posts {
   createdAt DateTime          @default(now())
   author    Mahasiswa         @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId  String
-  match     Boolean           @default(false)
   offer     offer[]
 }
 
 model offer {
-  id          String    @id @default(uuid())
-  mahasiswa   Mahasiswa @relation(fields: [mahasiswaId], references: [id], onDelete: Cascade)
+  id          String            @id @default(uuid())
+  mahasiswa   Mahasiswa         @relation(fields: [mahasiswaId], references: [id], onDelete: Cascade)
   mahasiswaId String
-  post        Posts     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  jadwal      JadwalMahasiswa[]
+  post        Posts             @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId      String
-  match       Boolean
+
+  @@unique([mahasiswaId, postId])
 }
 
 enum role {

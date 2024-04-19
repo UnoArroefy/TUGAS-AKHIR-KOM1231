@@ -3,7 +3,8 @@ import {
     getJadwalMahasiswa,
     getJadwalMahasiswaById,
     createJadwalMahasiswa,
-    deleteJadwalMahasiswa
+    deleteJadwalMahasiswa,
+    checkJadwalMahasiswa
 } from "../services/jadwalmahasiswa.service.js";
 
 import { createJadwalValidation } from "../validations/jadwalmahasiswa.validation.js";
@@ -59,6 +60,11 @@ export const createJadwalMahasiswaController = async (req, res) => {
     const jadwal = await getJadwalbyId(value.jadwalId);
     if (!jadwal) {
         return res.status(404).json({ message: "Jadwal not found" });
+    }
+
+    const check = await checkJadwalMahasiswa(value.mahasiswaId, value.jadwalId);
+    if (check) {
+        return res.status(404).json({ message: "Jadwal already exists" });
     }
 
     try {

@@ -3,8 +3,14 @@ import {
     getOfferofPost,
     getOfferbyId,
     createOffer,
-    deleteOffer
+    deleteOffer,
+    checkOffer
 } from "../services/offer.service.js";
+import { deletePost, getPostbyId } from "../services/post.service.js";
+import { getMahasiswabyId } from "../services/mahasiswa.service.js";
+import { getJadwalMahasiswaById } from "../services/jadwalmahasiswa.service.js";
+import { createOfferValidation } from "../validations/offer.validation.js";
+import { updateJadwalMahasiswa } from "../services/jadwalmahasiswa.service.js";
 
 export const getOfferAllController = async (req, res) => {
     const offer = await getOfferAll();
@@ -34,8 +40,48 @@ export const getOfferbyIdController = async (req, res) => {
 
 export const createOfferController = async (req, res) => {
     const data = req.body;
+
+    const {error, value} = createOfferValidation(data);
+    if (error) {
+        return res.status(404).json({ message: `${error}` });
+    }
+
+    const post = await getPostbyId(value.postId);
+    if (!post) {
+        return res.status(404).json({ message: "Post not found" });
+    }
+
+    const mahasiswa = await getMahasiswabyId(value.mahasiswaId);
+    if (!mahasiswa) {
+        return res.status(404).json({ message: "Mahasiswa not found" });
+    }
+
+    if (post.authorId == mahasiswa.id) {
+        return res.status(404).json({ message: "You are not allowed to create offer for your own post" });
+    }
+
+    const offer = await checkOffer(mahasiswa.id, post.id);
+    if (offer) {
+        return res.status(404).json({ message: "You are not allowed to create duplicate offer" });
+    }
+
+    const jadwals = post.jadwal.map(jadwal => jadwal.id);
+
+    for (let id of value.jadwalId) {
+        const jadwal = await getJadwalMahasiswaById(id);
+        if (!jadwal) {
+            return res.status(404).json({ message: "Jadwal not found" });
+        }
+        if (jadwal.mahasiswaId !== mahasiswa.id) {
+            return res.status(404).json({ message: "You are not allowed to create offer for this Jadwal" });
+        }
+        if (jadwals.includes(id)) {
+            return res.status(404).json({ message: "You can't offer the same jadwal" });
+        }
+    }
+
     try {
-        await createOffer(data);
+        await createOffer(value);
         res.status(200).json({ message: "Offer created successfully "});
     } catch (error) {
         res.status(500).json({ message: `Internal Server Error:  + ${error}`});
@@ -51,6 +97,40 @@ export const deleteOfferController = async (req, res) => {
     try {
         await deleteOffer(id);
         res.status(200).json({ message: "Offer deleted successfully "});
+    } catch (error) {
+        res.status(500).json({ message: "Internal Server Error " + error});
+    }
+}
+
+export const acceptOfferController = async (req, res) => {
+    const id = req.params.id;
+    const offer = await getOfferbyId(id);
+    if (!offer) {
+        return res.status(404).json({ message: "Offer not found" });
+    }
+    const penawar = offer.mahasiswaId;
+    const penukar = offer.post.authorId;
+    const jadwalPenukar = offer.post.jadwal.map(jadwal => jadwal.id);
+    const jadwalPenawar = offer.jadwal.map(jadwal => jadwal.id);
+    
+    for (let id of jadwalPenukar) {
+        try {
+            updateJadwalMahasiswa(id, penawar);
+        } catch (error) {
+            res.status(500).json({ message: "Internal Server Error " + error});
+        }
+    }
+    for (let id of jadwalPenawar) {
+        try {
+            updateJadwalMahasiswa(id, penukar);
+        } catch (error) {
+            res.status(500).json({ message: "Internal Server Error " + error});
+        }
+    }
+
+    try {
+        await deletePost(id);
+        res.status(200).json({ message: "Offer accepted successfully "});
     } catch (error) {
         res.status(500).json({ message: "Internal Server Error " + error});
     }

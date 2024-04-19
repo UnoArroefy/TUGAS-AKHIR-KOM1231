@@ -43,6 +43,16 @@ export const getJadwalMahasiswa = async (id) => {
     return jadwal;
 }
 
+export const checkJadwalMahasiswa = async (mahasiswaId, jadwalId) => {
+    const jadwal = await prisma.jadwalMahasiswa.findFirst({
+        where: {
+            mahasiswaId,
+            jadwalId
+        }
+    });
+    return jadwal;
+}
+
 export const createJadwalMahasiswa = async (data) => {
     const jadwal = await prisma.jadwalMahasiswa.create({
         data: {
@@ -60,4 +70,16 @@ export const deleteJadwalMahasiswa = async (id) => {
         }
     });
     return deleteJadwal;
+}
+
+export const updateJadwalMahasiswa = async (id, mahasiswaId) => {
+    const jadwal = await prisma.jadwalMahasiswa.update({
+        where: {
+            id,
+        },
+        data: {
+            mahasiswa: { connect: { id: mahasiswaId } }
+        }
+    });
+    return jadwal;
 }
