@@ -8,6 +8,7 @@ import {
 
 import { createJadwalValidation } from "../validations/jadwalmatkul.validation.js";
 import { getMatkulbyId } from "../services/matkul.service.js";
+import { deletemanyPost } from "../services/post.service.js";
 
 export const getJadwalAllController = async (req, res) => {
     const jadwal = await getJadwalAll();
@@ -53,6 +54,15 @@ export const getJadwalbyMatkulIdController = async (req, res) => {
     return res.status(200).json(jadwal);
 }
 
+export const getJadwalbyIdController = async (req, res) => {
+    const id = req.params.id;
+    const jadwal = await getJadwalbyId(id);
+    if (!jadwal) {
+        return res.status(404).json({ message: "Jadwal not found" });
+    }
+    return res.status(200).json(jadwal);
+}
+
 export const deleteJadwalController = async (req, res) => {
     const id = req.params.id;
     const jadwal = await getJadwalbyId(id);
@@ -61,6 +71,7 @@ export const deleteJadwalController = async (req, res) => {
     }
 
     try {
+        await deletemanyPost(id);
         await deleteJadwal(id);
         return res.status(200).json({ message: "Jadwal deleted successfully" });
     } catch (error) {

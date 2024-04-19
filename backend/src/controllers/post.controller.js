@@ -3,11 +3,14 @@ import {
     getPostbyId,
     getPostbyMatkul,
     getPostofUser,
+    createPost,
+    deletePost
 } from "../services/post.service.js";
 import { getMatkulbyKode } from "../services/matkul.service.js";
 import { createPostValidation } from "../validations/post.validation.js";
 import { getJadwalMahasiswaById } from "../services/jadwalmahasiswa.service.js";
 import { getMahasiswabyId } from "../services/mahasiswa.service.js";
+import { deleteAllOfferofPost } from "../services/offer.service.js";
 
 
 export const getPostAllController = async (req, res) => {
@@ -61,19 +64,39 @@ export const createPostController = async (req, res) => {
         return res.status(404).json({ message: `${error}` });
     }
 
-    const author = await getMahasiswabyIdController(value.authorId);
+    const author = await getMahasiswabyId(value.authorId);
     if (!author) {
         return res.status(404).json({ message: "Author not found" });
     }
-
-    const jadwal = await getJadwalMahasiswaById(value.jadwalId);
-    if (!jadwal) {
-        return res.status(404).json({ message: "Jadwal not found" });
+    for (let id of value.jadwalId) {
+        const jadwal = await getJadwalMahasiswaById(id);
+        if (!jadwal) {
+            return res.status(404).json({ message: "Jadwal not found" });
+        }
+    
+        if (jadwal.mahasiswaId !== author.id) {
+            return res.status(404).json({ message: "You are not allowed to create post for this Jadwal" });
+        }
     }
 
     try {
         await createPost(value);
         res.status(200).json({ message : "Post created successfully "});
+    } catch (error) {
+        res.status(500).json({ message: "Internal Server Error " + error});
+    }
+}
+
+export const deletePostController = async (req, res) => {
+    const id = req.params.id;
+    const post = await getPostbyId(id);
+    if (!post) {
+        return res.status(404).json({ message: "Post not found" });
+    }
+    try {
+        await deleteAllOfferofPost(id);
+        await deletePost(id);
+        res.status(200).json({ message: "Post deleted successfully "});
     } catch (error) {
         res.status(500).json({ message: "Internal Server Error " + error});
     }

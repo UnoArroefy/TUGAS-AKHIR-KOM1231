@@ -5,9 +5,8 @@ export const createPostValidation = (data) => {
         title: joi.string()
             .trim()
             .required(),
-        jadwalId: joi.string()
-            .trim()
-            .uuid()
+        jadwalId: joi.array()
+            .items(joi.string().trim().uuid())
             .required(),
         authorId: joi.string()
             .trim()

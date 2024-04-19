@@ -23,3 +23,28 @@ export const getOfferbyId = async (id) => {
     return offer;
 }
 
+export const createOffer = async (data) => {
+    const offer = await prisma.offer.create({
+        data,
+        post: { connect: { id: data.postId } }
+    });
+    return offer;
+}
+
+export const deleteOffer = async (id) => {
+    const deleteOffer = await prisma.offer.delete({
+        where: {
+            id,
+        }
+    });
+    return deleteOffer;
+}
+
+export const deleteAllOfferofPost = async (id) => {
+    const deleteOffer = await prisma.offer.deleteMany({
+        where: {
+            postId: id,
+        }
+    });
+    return deleteOffer;
+}

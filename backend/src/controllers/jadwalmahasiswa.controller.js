@@ -1,6 +1,7 @@
 import {
     getJadwalMahasiswaAll,
     getJadwalMahasiswa,
+    getJadwalMahasiswaById,
     createJadwalMahasiswa,
     deleteJadwalMahasiswa
 } from "../services/jadwalmahasiswa.service.js";
@@ -8,6 +9,7 @@ import {
 import { createJadwalValidation } from "../validations/jadwalmahasiswa.validation.js";
 import { getMahasiswabyId } from "../services/mahasiswa.service.js";
 import { getJadwalbyId } from "../services/jadwalmatkul.service.js";
+import { deletemanyPost } from "../services/post.service.js";
 
 export const getJadwalMahasiswaAllController = async (req, res) => {
     const jadwal = await getJadwalMahasiswaAll();
@@ -27,6 +29,15 @@ export const getJadwalMahasiswaController = async (req, res) => {
 
     const jadwal = await getJadwalMahasiswa(id);
     if (!jadwal.length) {
+        return res.status(404).json({ message: "Jadwal not found" });
+    }
+    return res.status(200).json(jadwal);
+}
+
+export const getJadwalMahasiswabyIdController = async (req, res) => {
+    const id = req.params.id;
+    const jadwal = await getJadwalMahasiswaById(id);
+    if (!jadwal) {
         return res.status(404).json({ message: "Jadwal not found" });
     }
     return res.status(200).json(jadwal);
@@ -66,6 +77,7 @@ export const deleteJadwalMahasiswaController = async (req, res) => {
     }
 
     try {
+        await deletemanyPost(id);
         await deleteJadwalMahasiswa(id);
         res.status(200).json({ message : "Jadwal deleted successfully "});
     } catch (error) {

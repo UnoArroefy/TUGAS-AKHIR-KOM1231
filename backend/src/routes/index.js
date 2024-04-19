@@ -13,5 +13,6 @@ router.use("/mahasiswa", mahasiswa);
 router.use("/jadwal-matkul", jadwalmatkul);
 router.use("/jadwal-mahasiswa", jadwalmahasiswa);
 router.use("/post", post);
+router.use("/offer", offer);
 
 export default router;

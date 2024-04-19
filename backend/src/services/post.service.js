@@ -1,7 +1,35 @@
 import prisma from "../db/index.js";
 
 export const getPostAll = async () => {
-    const posts = await prisma.posts.findMany();
+    const posts = await prisma.posts.findMany(
+        {
+            include: {
+                jadwal: {
+                    select: {
+                        id: true,
+                        mahasiswa: {
+                            select: {
+                                nama: true,
+                                nim: true
+                            }
+                        },
+                        jadwal: {
+                            select: {
+                                hari: true,
+                                jam: true,
+                                ruangan: true,
+                                mataKuliah: {
+                                    select: {
+                                        nama: true
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    );
     return posts;
 }
 
@@ -12,17 +40,28 @@ export const getPostofUser = async (id) => {
         }, include: {
             author: {
                 select: {
-                    name: true,
+                    nama: true,
                 }
             },
             jadwal: {
                 select: {
-                    hari: true,
-                    jam: true,
-                    ruangan: true,
-                    mataKuliah: {
+                    id: true,
+                    mahasiswa: {
                         select: {
-                            nama: true
+                            nama: true,
+                            nim: true
+                        }
+                    },
+                    jadwal: {
+                        select: {
+                            hari: true,
+                            jam: true,
+                            ruangan: true,
+                            mataKuliah: {
+                                select: {
+                                    nama: true
+                                }
+                            }
                         }
                     }
                 }
@@ -41,17 +80,28 @@ export const getPostbyMatkul = async (id) => {
         }, include: {
             author: {
                 select: {
-                    name: true,
+                    nama: true,
                 }
             },
             jadwal: {
                 select: {
-                    hari: true,
-                    jam: true,
-                    ruangan: true,
-                    mataKuliah: {
+                    id: true,
+                    mahasiswa: {
                         select: {
-                            nama: true
+                            nama: true,
+                            nim: true
+                        }
+                    },
+                    jadwal: {
+                        select: {
+                            hari: true,
+                            jam: true,
+                            ruangan: true,
+                            mataKuliah: {
+                                select: {
+                                    nama: true
+                                }
+                            }
                         }
                     }
                 }
@@ -70,17 +120,28 @@ export const getPostbySearch = async (search) => {
         }, include: {
             author: {
                 select: {
-                    name: true,
+                    nama: true,
                 }
             },
             jadwal: {
                 select: {
-                    hari: true,
-                    jam: true,
-                    ruangan: true,
-                    mataKuliah: {
+                    id: true,
+                    mahasiswa: {
                         select: {
-                            nama: true
+                            nama: true,
+                            nim: true
+                        }
+                    },
+                    jadwal: {
+                        select: {
+                            hari: true,
+                            jam: true,
+                            ruangan: true,
+                            mataKuliah: {
+                                select: {
+                                    nama: true
+                                }
+                            }
                         }
                     }
                 }
@@ -97,17 +158,28 @@ export const getPostbyId = async (id) => {
         }, include: {
             author: {
                 select: {
-                    name: true,
+                    nama: true,
                 }
             },
             jadwal: {
                 select: {
-                    hari: true,
-                    jam: true,
-                    ruangan: true,
-                    mataKuliah: {
+                    id: true,
+                    mahasiswa: {
                         select: {
-                            nama: true
+                            nama: true,
+                            nim: true
+                        }
+                    },
+                    jadwal: {
+                        select: {
+                            hari: true,
+                            jam: true,
+                            ruangan: true,
+                            mataKuliah: {
+                                select: {
+                                    nama: true
+                                }
+                            }
                         }
                     }
                 }
@@ -118,24 +190,48 @@ export const getPostbyId = async (id) => {
 }
 
 export const createPost = async (data) => {
+
     const posts = await prisma.posts.create({
         data: {
             title: data.title,
-            jadwal: { connect: { id: data.jadwalId } },
+            jadwal: {
+                connect: data.jadwalId.map(id => ({ id }))
+            },
             author: { connect: { id: data.authorId } },
         }
     });
     return posts;
 }
 
-export const offertoPost = async (id) => {
-    const posts = await prisma.posts.update({
+export const deletePost = async (id) => {
+    const deletePost = await prisma.posts.delete({
         where: {
             id,
-        },
-        data: {
-            offer: { connect: { id: data.offerId } },
         }
     });
-    return posts;
+    return deletePost;
 }
+
+export const deletemanyPost = async (id) => {
+    const deletePost = await prisma.posts.deleteMany({
+        where: {
+            OR: [
+                {
+                    jadwal: {
+                        some: {
+                            id: id
+                        }
+                    }
+                },
+                {
+                    jadwal: {
+                        some: {
+                            jadwalId: id
+                        }
+                    }
+                }
+            ]
+        }
+    });
+    return deletePost;
+};
