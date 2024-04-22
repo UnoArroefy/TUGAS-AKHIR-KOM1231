@@ -1,6 +1,6 @@
 import joi from "joi";
 
-export const createMatkulValidation = (data) => {
+export const matkulFullValidation = (data) => {
     const schema = joi.object({
         nama: joi.string()
             .trim()
@@ -18,3 +18,20 @@ export const createMatkulValidation = (data) => {
 
     return schema.validate(data);
 };
+
+export const matkulPartialValidation = (data) => {
+    const schema = joi.object({
+        nama: joi.string()
+            .trim(),
+        kode: joi.string()
+            .trim()
+            .regex(/^[A-Z]*\d*[A-Z]?$/)
+            .message('Invalid kode mata kuliah'),
+        sks: joi.number()
+            .min(1)
+            .max(6),
+    })
+    .or('nama', 'kode', 'sks');
+
+    return schema.validate(data);
+}

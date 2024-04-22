@@ -1,13 +1,12 @@
 import {
     getMahasiswaAll,
     getMahasiswabyId,
-    getMahasiswabyNIM,
-    getMahasiswabyEmail,
     createMahasiswa,
-    deleteMahasiswa
+    deleteMahasiswa,
+    updateMahasiswa
 } from "../services/mahasiswa.service.js";
-
-import { createMahasiswaValidation } from "../validations/mahasiswa.validation.js";
+import {mahasiswaPartialValidation, mahasiswaFullValidation } from "../validations/mahasiswa.validation.js";
+import bcrypt from "bcrypt";
 
 export const getMahasiswaAllController = async (req, res) => {
     const mahasiswa = await getMahasiswaAll();
@@ -28,26 +27,26 @@ export const getMahasiswabyIdController = async (req, res) => {
 
 export const createMahasiswaController = async (req, res) => {
     const data = req.body;
-    const {error, value} = createMahasiswaValidation(data);
+    const {error, value} = mahasiswaFullValidation(data);
     if (error) {
         return res.status(404).json({ message: `${error}` });
     }
 
-    const uniqueNIM = await getMahasiswabyNIM(value.nim);
-    if (uniqueNIM) {
-        return res.status(404).json({ message: "NIM already exists" });
-    }
-
-    const uniqueEmail = await getMahasiswabyEmail(value.email);
-    if (uniqueEmail) {
-        return res.status(404).json({ message: "Email already exists" });
-    }
-
+    value.password = await bcrypt.hash(value.password, 10);
+    console.log(value);
     try {
         await createMahasiswa(value);
         res.status(200).json({ message : "Mahasiswa created successfully "});
     } catch (error) {
-        res.status(500).json({ message: "Internal Server Error " + error});
+        if (error.code === 'P2002') {
+            if (error.meta.target.includes('nim')) {
+                return res.status(404).json({ message: 'NIM is already in use.' });
+            } else if (error.meta.target.includes('email')) {
+                return res.status(404).json({ message: 'Email is already in use.' });
+            }
+        }
+
+        return res.status(500).json({ message: `Internal Server Error:  + ${error}`});
     }
 };
 
@@ -65,3 +64,71 @@ export const deleteMahasiswaController = async (req, res) => {
         return res.status(500).json({ message: `Internal Server Error:  + ${error}`});
     }
 };
+
+export const updateMahasiswaController = async (req, res) => {
+    const id = req.params.id;
+    const data = req.body;
+    const {error, value} = mahasiswaFullValidation(data);
+    if (error) {
+        return res.status(404).json({ message: `${error}` });
+    }
+
+    const mahasiswa = await getMahasiswabyId(id);
+    if (!mahasiswa) {
+        return res.status(404).json({ message: "Mahasiswa not found" });
+    }
+
+    try {
+        await updateMahasiswa(id, {
+            nama: value.nama,
+            nim: value.nim,
+            email: value.email,
+            password: await bcrypt.hash(value.password, 10),
+            role: value.role
+        });
+        return res.status(200).json({ message: "Mahasiswa updated successfully" });
+    } catch (error) {
+        if (error.code === 'P2002') {
+            if (error.meta.target.includes('nim')) {
+                return res.status(404).json({ message: 'NIM is already in use.' });
+            } else if (error.meta.target.includes('email')) {
+                return res.status(404).json({ message: 'Email is already in use.' });
+            }
+        }
+
+        return res.status(500).json({ message: `Internal Server Error:  + ${error}`});
+    }
+};
+
+export const updateMahasiswaPartialController = async (req, res) => {
+    const id = req.params.id;
+    const data = req.body;
+    const {error, value} = mahasiswaPartialValidation(data);
+    if (error) {
+        return res.status(404).json({ message: `${error}` });
+    }
+
+    const mahasiswa = await getMahasiswabyId(id);
+    if (!mahasiswa) {
+        return res.status(404).json({ message: "Mahasiswa not found" });
+    }
+
+    if (value.password) {
+        value.password = await bcrypt.hash(value.password, 10);
+    }
+
+    try {
+        await updateMahasiswa(id, value);
+        return res.status(200).json({ message: "Mahasiswa updated successfully" });
+    } catch (error) {
+        if (error.code === 'P2002') {
+            if (error.meta.target.includes('nim')) {
+                return res.status(404).json({ message: 'NIM is already in use.' });
+            } else if (error.meta.target.includes('email')) {
+                return res.status(404).json({ message: 'Email is already in use.' });
+            }
+        }
+
+        return res.status(500).json({ message: `Internal Server Error:  + ${error}`});
+    }
+}

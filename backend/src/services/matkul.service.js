@@ -58,20 +58,6 @@ export const updateMatkul = async (id, data) => {
             id,
         },
         data: {
-            nama: data.nama,
-            kode: data.kode,
-            sks: data.sks,
-        }
-    });
-    return mataKuliah;
-}
-
-export const updateMatkulPartial = async (id, data) => {
-    const mataKuliah = await prisma.mataKuliah.update({
-        where: {
-            id,
-        },
-        data: {
             ...data,
         }
     });

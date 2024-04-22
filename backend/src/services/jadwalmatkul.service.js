@@ -54,3 +54,15 @@ export const deleteJadwal = async (id) => {
     });
     return deleteJadwal;
 }
+
+export const updateJadwal = async (id, data) => {
+    const jadwal = await prisma.jadwalMataKuliah.update({
+        where: {
+            id,
+        },
+        data: {
+            ...data,
+        }
+    });
+    return jadwal;
+}
