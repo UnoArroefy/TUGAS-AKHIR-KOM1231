@@ -43,3 +43,12 @@ export const updateMahasiswa = async (id, data) => {
     });
     return mahasiswa;
 }
+
+export const getMahasiswabyEmail = async (data) => {
+    const mahasiswa = await prisma.mahasiswa.findUnique({
+        where: {
+            email: data.email,
+        }
+    });
+    return mahasiswa;
+}

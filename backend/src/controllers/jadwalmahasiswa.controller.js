@@ -46,10 +46,14 @@ export const getJadwalMahasiswabyIdController = async (req, res) => {
 
 export const createJadwalMahasiswaController = async (req, res) => {
     const data = req.body;
-
     const {error, value} = createJadwalValidation(data);
     if (error) {
         return res.status(404).json({ message: `${error}` });
+    }
+
+    const user = req.user;
+    if (user.role !== "Admin" && user.id !== value.mahasiswaId) {
+        return res.status(403).json({ message: "Forbidden" });
     }
 
     const mahasiswa = await getMahasiswabyId(value.mahasiswaId);
@@ -77,9 +81,14 @@ export const createJadwalMahasiswaController = async (req, res) => {
 
 export const deleteJadwalMahasiswaController = async (req, res) => {
     const id = req.params.id;
-    const jadwal = await getJadwalMahasiswa(id);
+    const jadwal = await getJadwalMahasiswaById(id);
     if (!jadwal) {
         return res.status(404).json({ message: "Jadwal not found" });
+    }
+
+    const user = req.user;
+    if (user.role !== "Admin" && user.id !== jadwal.mahasiswaId) {
+        return res.status(403).json({ message: "Forbidden" });
     }
 
     try {

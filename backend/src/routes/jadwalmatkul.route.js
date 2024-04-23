@@ -8,15 +8,16 @@ import {
     updateJadwalController,
     updateJadwalPartialController
 } from "../controllers/jadwalmatkul.controller.js";
+import { checkAdmin, checkAuth } from "../middlewares/auth.js";
 
 const router = Router();
 
-router.get("/", getJadwalAllController);
-router.get("/:id", getJadwalbyIdController);
-router.get("/matkul/:id", getJadwalbyMatkulIdController);
-router.post("/", createJadwalController);
-router.delete("/:id", deleteJadwalController);
-router.put("/:id", updateJadwalController);
-router.patch("/:id", updateJadwalPartialController);
+router.get("/", checkAuth, getJadwalAllController);
+router.get("/:id", checkAuth, getJadwalbyIdController);
+router.get("/matkul/:id", checkAuth,getJadwalbyMatkulIdController);
+router.post("/", checkAdmin, createJadwalController);
+router.delete("/:id", checkAdmin, deleteJadwalController);
+router.put("/:id", checkAdmin, updateJadwalController);
+router.patch("/:id", checkAdmin, updateJadwalPartialController);
 
 export default router;

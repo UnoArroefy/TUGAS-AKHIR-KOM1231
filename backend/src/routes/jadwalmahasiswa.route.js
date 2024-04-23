@@ -6,13 +6,14 @@ import {
     createJadwalMahasiswaController,
     deleteJadwalMahasiswaController,
 } from "../controllers/jadwalmahasiswa.controller.js";
+import { checkAuth } from "../middlewares/auth.js";
 
 const router = Router();
 
-router.get("/", getJadwalMahasiswaAllController);
-router.get("/:id", getJadwalMahasiswabyIdController);
-router.get("/user/:id", getJadwalMahasiswaController);
-router.post("/", createJadwalMahasiswaController);
-router.delete("/:id", deleteJadwalMahasiswaController);
+router.get("/", checkAuth, getJadwalMahasiswaAllController);
+router.get("/:id", checkAuth, getJadwalMahasiswabyIdController);
+router.get("/user/:id", checkAuth, getJadwalMahasiswaController);
+router.post("/", checkAuth, createJadwalMahasiswaController);
+router.delete("/:id", checkAuth, deleteJadwalMahasiswaController);
 
 export default router;

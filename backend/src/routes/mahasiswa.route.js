@@ -7,14 +7,15 @@ import {
     updateMahasiswaController,
     updateMahasiswaPartialController
 } from "../controllers/mahasiswa.controller.js";
+import { checkAdmin, checkAuth } from "../middlewares/auth.js";
 
 const router = Router();
 
-router.get("/", getMahasiswaAllController);
-router.get("/:id", getMahasiswabyIdController);
+router.get("/", checkAdmin, getMahasiswaAllController);
+router.get("/:id", checkAuth, getMahasiswabyIdController);
 router.post("/", createMahasiswaController);
-router.delete("/:id", deleteMahasiswaController);
-router.put("/:id", updateMahasiswaController);
-router.patch("/:id", updateMahasiswaPartialController);
+router.delete("/:id", checkAuth, deleteMahasiswaController);
+router.put("/:id", checkAuth, updateMahasiswaController);
+router.patch("/:id", checkAuth, updateMahasiswaPartialController);
 
 export default router;

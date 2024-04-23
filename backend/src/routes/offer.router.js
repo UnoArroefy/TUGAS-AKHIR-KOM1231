@@ -7,15 +7,16 @@ import {
     deleteOfferController,
     acceptOfferController,
 } from "../controllers/offer.controller.js"
+import { checkAuth } from "../middlewares/auth.js";
 
 
 const router = Router();
 
-router.get("/", getOfferAllController);
-router.get("/:id", getOfferbyIdController);
-router.get("/post/:id", getOfferofPostController);
-router.post("/", createOfferController);
-router.delete("/:id", deleteOfferController);
-router.patch("/:id", acceptOfferController);
+router.get("/", checkAuth, getOfferAllController);
+router.get("/:id", checkAuth, getOfferbyIdController);
+router.get("/post/:id", checkAuth, getOfferofPostController);
+router.post("/", checkAuth, createOfferController);
+router.delete("/:id", checkAuth, deleteOfferController);
+router.patch("/:id", checkAuth, acceptOfferController);
 
 export default router;

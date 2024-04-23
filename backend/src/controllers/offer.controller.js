@@ -56,6 +56,11 @@ export const createOfferController = async (req, res) => {
         return res.status(404).json({ message: "Mahasiswa not found" });
     }
 
+    const user = req.user;
+    if (user.id !== mahasiswa.id) {
+        return res.status(403).json({ message: "Forbidden" });
+    }
+
     if (post.authorId == mahasiswa.id) {
         return res.status(404).json({ message: "You are not allowed to create offer for your own post" });
     }
@@ -94,6 +99,12 @@ export const deleteOfferController = async (req, res) => {
     if (!offer) {
         return res.status(404).json({ message: "Offer not found" });
     }
+
+    const user = req.user;
+    if (user.role !== "Admin" && user.id !== offer.post.authorId && user.id !== offer.mahasiswaId) {
+        return res.status(403).json({ message: "Forbidden" });
+    }
+
     try {
         await deleteOffer(id);
         res.status(200).json({ message: "Offer deleted successfully "});
@@ -113,6 +124,11 @@ export const acceptOfferController = async (req, res) => {
     const jadwalPenukar = offer.post.jadwal.map(jadwal => jadwal.id);
     const jadwalPenawar = offer.jadwal.map(jadwal => jadwal.id);
     
+    const user = req.user;
+    if (user.id !== penukar) {
+        return res.status(403).json({ message: "Forbidden" });
+    }
+
     for (let id of jadwalPenukar) {
         try {
             updateJadwalMahasiswa(id, penawar);

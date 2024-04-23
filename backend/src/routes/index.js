@@ -5,6 +5,7 @@ import jadwalmatkul from "./jadwalmatkul.route.js";
 import jadwalmahasiswa from "./jadwalmahasiswa.route.js"
 import post from "./post.route.js";
 import offer from "./offer.router.js"
+import auth from "./auth.route.js"
 
 const router = Router();
 
@@ -14,5 +15,6 @@ router.use("/jadwal-matkul", jadwalmatkul);
 router.use("/jadwal-mahasiswa", jadwalmahasiswa);
 router.use("/post", post);
 router.use("/offer", offer);
+router.use("/auth", auth);
 
 export default router;

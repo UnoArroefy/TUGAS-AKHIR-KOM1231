@@ -5,7 +5,7 @@ import {
     deleteMahasiswa,
     updateMahasiswa
 } from "../services/mahasiswa.service.js";
-import {mahasiswaPartialValidation, mahasiswaFullValidation } from "../validations/mahasiswa.validation.js";
+import { mahasiswaPartialValidation, mahasiswaFullValidation } from "../validations/mahasiswa.validation.js";
 import bcrypt from "bcrypt";
 
 export const getMahasiswaAllController = async (req, res) => {
@@ -18,6 +18,10 @@ export const getMahasiswaAllController = async (req, res) => {
 
 export const getMahasiswabyIdController = async (req, res) => {
     const id = req.params.id;
+    const user = req.user;
+    if (user.role !== "Admin" && user.id !== id) {
+        return res.status(403).json({ message: "Forbidden" });
+    }
     const mahasiswa = await getMahasiswabyId(id);
     if (!mahasiswa) {
         return res.status(404).json({ message: "Mahasiswa not found" });
@@ -31,9 +35,9 @@ export const createMahasiswaController = async (req, res) => {
     if (error) {
         return res.status(404).json({ message: `${error}` });
     }
-
+    console.log(value.password);
     value.password = await bcrypt.hash(value.password, 10);
-    console.log(value);
+    console.log(value.password);
     try {
         await createMahasiswa(value);
         res.status(200).json({ message : "Mahasiswa created successfully "});
@@ -52,6 +56,11 @@ export const createMahasiswaController = async (req, res) => {
 
 export const deleteMahasiswaController = async (req, res) => {
     const id = req.params.id;
+    const user = req.user;
+    if (user.role !== "Admin" && user.id !== id) {
+        return res.status(403).json({ message: "Forbidden" });
+    }
+
     const mahasiswa = await getMahasiswabyId(id);
     if (!mahasiswa) {
         return res.status(404).json({ message: "Mahasiswa not found" });
@@ -73,6 +82,11 @@ export const updateMahasiswaController = async (req, res) => {
         return res.status(404).json({ message: `${error}` });
     }
 
+    const user = req.user;
+    if (user.role !== "Admin" && user.id !== id) {
+        return res.status(403).json({ message: "Forbidden" });
+    }
+
     const mahasiswa = await getMahasiswabyId(id);
     if (!mahasiswa) {
         return res.status(404).json({ message: "Mahasiswa not found" });
@@ -83,7 +97,7 @@ export const updateMahasiswaController = async (req, res) => {
             nama: value.nama,
             nim: value.nim,
             email: value.email,
-            password: await bcrypt.hash(value.password, 10),
+            password: await bcrypt.hash(value.newPassword, 10),
             role: value.role
         });
         return res.status(200).json({ message: "Mahasiswa updated successfully" });
@@ -106,6 +120,11 @@ export const updateMahasiswaPartialController = async (req, res) => {
     const {error, value} = mahasiswaPartialValidation(data);
     if (error) {
         return res.status(404).json({ message: `${error}` });
+    }
+
+    const user = req.user;
+    if (user.role !== "Admin" && user.id !== id) {
+        return res.status(403).json({ message: "Forbidden" });
     }
 
     const mahasiswa = await getMahasiswabyId(id);
