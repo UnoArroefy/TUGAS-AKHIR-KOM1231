@@ -6,6 +6,7 @@ import { HomePage } from './pages/HomePage';
 import { PostPage } from './pages/PostPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { LoginPage } from './pages/LoginPage';
+import { RegisterPage } from './pages/RegisterPage';
 
 const router = createBrowserRouter([{
   path: '/',
@@ -19,6 +20,10 @@ const router = createBrowserRouter([{
 {
   path: '/login',
   element: <LoginPage />,
+},
+{
+  path: '/register',
+  element: <RegisterPage />,
 },
 {
   path: '/404',
