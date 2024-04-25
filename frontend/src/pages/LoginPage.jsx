@@ -1,6 +1,10 @@
 import { FormLogin } from "@/components/FormLogin";
+import { useEffect } from "react";
 
 export const LoginPage = () => {
+    useEffect(() => {
+        document.title = "Login"
+    });
     return (
         <div className="h-screen w-full lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[800px]">
         <div className="hidden bg-muted lg:block">

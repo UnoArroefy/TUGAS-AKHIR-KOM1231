@@ -35,9 +35,7 @@ export const createMahasiswaController = async (req, res) => {
     if (error) {
         return res.status(404).json({ message: `${error}` });
     }
-    console.log(value.password);
     value.password = await bcrypt.hash(value.password, 10);
-    console.log(value.password);
     try {
         await createMahasiswa(value);
         res.status(200).json({ message : "Mahasiswa created successfully "});
