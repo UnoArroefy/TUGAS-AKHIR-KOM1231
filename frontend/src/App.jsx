@@ -7,10 +7,17 @@ import { PostPage } from './pages/PostPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { LoginPage } from './pages/LoginPage';
 import { RegisterPage } from './pages/RegisterPage';
+import AuthProvider from '@/components/AuthProvider';
+import ProtectedRoute from './components/ProtectedRoute';
+
 
 const router = createBrowserRouter([{
   path: '/',
-  element: <HomePage />,
+  element: (
+    <ProtectedRoute>
+      <HomePage />
+    </ProtectedRoute>
+  ),
   errorElement: <Navigate to="/404" replace />,
 },
 {
@@ -33,7 +40,9 @@ const router = createBrowserRouter([{
 function App() {
   return (
     <ThemeProvider>
+      <AuthProvider>
       <RouterProvider router={router} />
+      </AuthProvider>
     </ThemeProvider>
   )
 }

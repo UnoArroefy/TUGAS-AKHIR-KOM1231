@@ -6,7 +6,7 @@ export const RegisterPage = () => {
         document.title = "Register"
     });
     return (
-        <div className="h-screen w-full lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[800px]">
+      <div className="h-screen w-full lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[800px]">
         <div className="hidden bg-muted lg:block">
           <img
             alt="Image"

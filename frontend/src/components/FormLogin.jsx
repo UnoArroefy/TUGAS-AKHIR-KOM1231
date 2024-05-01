@@ -2,7 +2,7 @@
 
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -10,6 +10,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import api from "../api/axios"
 import { toast } from "sonner";
 import { Toaster } from "./ui/sonner";
+import { useAuth } from "./AuthProvider";
+import { useEffect } from "react";
 
 const schema = z.object({
   email: z.string()
@@ -22,6 +24,8 @@ const schema = z.object({
 
 export function FormLogin() {
 
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -30,11 +34,23 @@ export function FormLogin() {
     resolver: zodResolver(schema),
   });
 
+  const [user, setUser] = useAuth();
+
+  useEffect(() => {
+    if (window.localStorage.getItem("accessToken") || user.accessToken) {
+      navigate("/", { replace: true });
+    }
+  }, [navigate, user]);
+
   const onSubmit = async (data) => {
+
     try {
       const response = await api.post("/auth/login", data);
       toast.success("Login success");
-      console.log(response.data.message);
+      console.log
+      setUser({ accessToken : response.data.accessToken});
+      window.localStorage.setItem("accessToken", response.data.accessToken);
+      return navigate("/");
     } catch (error) {
       toast.error("Error occured", {
         description: error.response.data.message,
@@ -53,7 +69,7 @@ export function FormLogin() {
           <div className="grid gap-4">
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
-              <Input {...register("email")} id="email" placeholder="user@apps.ipb.ac.id" required type="email"/>
+              <Input {...register("email")} id="email" placeholder="user@apps.ipb.ac.id" required type="email" autoFocus/>
               {
                 errors.email && <p className="text-red-500 text-xs">{errors.email.message}</p>
               }

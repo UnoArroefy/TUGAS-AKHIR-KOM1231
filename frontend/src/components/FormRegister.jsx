@@ -64,7 +64,7 @@ export function FormRegister() {
           <div className="grid gap-4">
             <div className="grid gap-2">
               <Label htmlFor="nama">Nama</Label>
-              <Input {...register("nama")} id="nama" placeholder="Naruto Uzumaki" type="text"/>
+              <Input {...register("nama")} id="nama" placeholder="Naruto Uzumaki" required type="text" autoFocus/>
               {
                 errors.nama && <p className="text-red-500 text-xs">{errors.nama.message}</p>
               }

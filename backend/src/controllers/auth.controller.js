@@ -23,9 +23,9 @@ export const loginController = async (req, res, next) => {
         return res.status(404).json({ message: "Invalid password" });
     }
 
-    const token = await jwt.sign({ id: mahasiswa.id, role: mahasiswa.role }, process.env.JWT_SECRET, { expiresIn: "1h" });
+    const token = await jwt.sign({ id: mahasiswa.id, role: mahasiswa.role }, process.env.JWT_SECRET, { expiresIn: "1d" });
     valid_tokens.add(token);
-    res.status(200).json({message: token });
+    res.status(200).json({ accessToken: token });
 }
 
 export const logoutController = async (req, res) => {
