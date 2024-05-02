@@ -1,4 +1,3 @@
-import { Button } from '@/components/ui/button'
 import { ThemeProvider } from "@/components/theme-provider"
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
 
@@ -18,11 +17,15 @@ const router = createBrowserRouter([{
       <HomePage />
     </ProtectedRoute>
   ),
-  errorElement: <Navigate to="/404" replace />,
+  // errorElement: <Navigate to="/404" replace />,
 },
 {
   path: '/post',
-  element: <PostPage />,
+  element: (
+    <ProtectedRoute>
+      <PostPage />
+    </ProtectedRoute>
+  ),
 },
 {
   path: '/login',

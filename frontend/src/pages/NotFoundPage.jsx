@@ -1,4 +1,9 @@
+import { useNavigate } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+
 export const NotFoundPage = () => {
+    const navigate = useNavigate();
+
     return (
         <div className="absolute left-1/2 top-1/2 mb-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center text-center">
         <span className="bg-gradient-to-b from-foreground to-transparent bg-clip-text text-[10rem] font-extrabold leading-none text-transparent">
@@ -11,14 +16,14 @@ export const NotFoundPage = () => {
           Sorry, the page you are looking for doesn&apos;t exist or has been
           moved.
         </p>
-        {/* <div className="mt-8 flex justify-center gap-2">
-          <Button onClick={() => router.back()} variant="default" size="lg">
+        <div className="mt-8 flex justify-center gap-2">
+          <Button onClick={() => navigate(-1)} variant="default" size="lg">
             Go back
           </Button>
-          <Button onClick={() => router.push('/')} variant="ghost" size="lg">
+          <Button onClick={() => navigate('/')} variant="ghost" size="lg">
             Back to Home
           </Button>
-        </div> */}
+        </div>
       </div>
     )
 }

@@ -3,6 +3,7 @@ import ModeToggle from '@/components/ModeToggle'
 import { useEffect } from 'react'
 import { useAuth } from '@/components/AuthProvider'
 import { jwtDecode } from 'jwt-decode'
+import { Header } from '@/components/ui/header'
 
 export const HomePage = () => {
     useEffect(() => {
@@ -15,9 +16,10 @@ export const HomePage = () => {
         console.log(jwtDecode(user.accessToken))
     }
     return (
-        <div className="flex justify-center px-20">
-        <Button onClick={test}> Hello </Button>
-        <ModeToggle />
-        </div>
+        <Header>
+            <div className="flex justify-center px-20">
+            <Button onClick={test}> Hello </Button>
+            </div>
+        </Header>
     )
 }
