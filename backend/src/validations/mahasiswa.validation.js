@@ -14,6 +14,7 @@ export const mahasiswaFullValidation = (data) => {
         email: joi.string()
             .trim()
             .regex(/^[^\s@]+@apps\.ipb\.ac\.id$/)
+            .email({ tlds: { allow: false } })
             .message('Invalid email address')
             .required(),
         password: joi.string()

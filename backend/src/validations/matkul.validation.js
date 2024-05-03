@@ -9,6 +9,7 @@ export const matkulFullValidation = (data) => {
             .trim()
             .regex(/^[A-Z]*\d*[A-Z]?$/)
             .message('Invalid kode mata kuliah')
+            .max(7)
             .required(),
         sks: joi.number()
             .min(1)
@@ -26,7 +27,8 @@ export const matkulPartialValidation = (data) => {
         kode: joi.string()
             .trim()
             .regex(/^[A-Z]*\d*[A-Z]?$/)
-            .message('Invalid kode mata kuliah'),
+            .message('Invalid kode mata kuliah')
+            .max(7),
         sks: joi.number()
             .min(1)
             .max(6),

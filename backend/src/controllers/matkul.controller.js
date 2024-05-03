@@ -3,6 +3,7 @@ import {
     getMatkulbyId,
     createMatkul,
     deleteMatkulbyId,
+    updateMatkul
 } from "../services/matkul.service.js";
 
 import {matkulFullValidation, matkulPartialValidation } from "../validations/matkul.validation.js";
