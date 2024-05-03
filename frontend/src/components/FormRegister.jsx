@@ -56,6 +56,7 @@ export function FormRegister() {
     try {
       const response = await api.post("/mahasiswa", data);
       toast.success("Account created successfully");
+      console.log(response.data.message);
     } catch (error) {
       toast.error("Error occured", {
         description: error.response.data.message,

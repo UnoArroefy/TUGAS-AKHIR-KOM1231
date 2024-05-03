@@ -4,11 +4,12 @@ import { SheetTrigger, SheetContent, Sheet } from "@/components/ui/sheet"
 import { DropdownMenuTrigger, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuItem, DropdownMenuContent, DropdownMenu } from "@/components/ui/dropdown-menu"
 import ModeToggle from "../ModeToggle"
 import { useAuth } from "../AuthProvider";
+import api from "../../api/axios"
 
-export function Header({children}) {
+export function Layout({children}) {
 
   const location = useLocation();
-  const [, setUser] = useAuth();
+  const [user, setUser] = useAuth();
   const navigate = useNavigate();
 
   const routes = [
@@ -27,6 +28,14 @@ export function Header({children}) {
   ];
 
   const logout = () => {
+    if (user.accessToken){
+      console.log(user.accessToken);
+      api.post("/auth/logout", {}, {
+        headers: {
+          Authorization: `Bearer ${user.accessToken}`
+        }
+      });
+    }
     window.localStorage.removeItem("accessToken");
     setUser({});
     navigate("/login");
@@ -63,7 +72,7 @@ export function Header({children}) {
           </SheetTrigger>
           <SheetContent side="left">
             <nav className="grid gap-6 text-lg font-medium">
-              <Link className="flex items-center gap-2 text-lg font-semibold md:text-base cursor-default md:animate-bounce">
+              <Link className="flex items-center gap-2 text-lg font-semibold md:text-base cursor-default sm:animate-bounce md:animate-bounce">
                 KRSans
               </Link>
               {routes.map((route, i) => (
