@@ -9,7 +9,6 @@ import { RegisterPage } from './pages/RegisterPage';
 import AuthProvider from '@/components/AuthProvider';
 import ProtectedRoute from './components/ProtectedRoute';
 import { MatkulPage } from "./pages/MatkulPage";
-import { MatkulIdPage } from "./pages/MatkulIdPage";
 
 
 const router = createBrowserRouter([{

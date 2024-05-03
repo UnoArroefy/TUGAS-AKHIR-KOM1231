@@ -47,7 +47,6 @@ export function FormLogin() {
     try {
       const response = await api.post("/auth/login", data);
       toast.success("Login success");
-      console.log
       setUser({ accessToken : response.data.accessToken});
       window.localStorage.setItem("accessToken", response.data.accessToken);
       return navigate("/");

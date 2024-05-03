@@ -1,9 +1,9 @@
 import { Button } from '@/components/ui/button'
-import ModeToggle from '@/components/ModeToggle'
 import { useEffect } from 'react'
 import { useAuth } from '@/components/AuthProvider'
 import { jwtDecode } from 'jwt-decode'
 import { Layout } from '@/components/ui/layout'
+import { TableJ } from '@/components/TableJCard'
 
 export const HomePage = () => {
     useEffect(() => {

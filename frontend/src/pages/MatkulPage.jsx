@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
 import MatkulCard from '@/components/MatkulCard'
 import api from "../api/axios"
+import { FormMatkul } from '@/components/FormMatkul';
 
 export const MatkulPage = () => {
 
@@ -41,9 +42,11 @@ export const MatkulPage = () => {
                 <MatkulCard key={index} data={item}/>
             ))}
             </div>
-            <div className="flex justify-center px-20">
-                <Button> Add Mata Kuliah </Button>
-            </div>
+            <FormMatkul user={user}>
+                <div className="flex justify-center px-20">
+                    <Button> Add Mata Kuliah </Button>
+                </div>
+            </FormMatkul>
             <Toaster
                 toastOptions={{
                     unstyled: false,
