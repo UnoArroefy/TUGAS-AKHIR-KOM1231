@@ -69,7 +69,6 @@ const MatkulCard = ({ data }) => {
   });
 
   const fetchJadwal = async () => {
-    console.log(data.id);
     try {
         const response = await api.get(`/jadwal-matkul/matkul/${data.id}`, {
             headers: {
@@ -117,7 +116,7 @@ const MatkulCard = ({ data }) => {
 
   useEffect(() => {
       fetchJadwal();
-  }, [data.id]);
+  }, []);
 
   return (
     <Dialog onOpenChange={
@@ -224,7 +223,7 @@ const MatkulCard = ({ data }) => {
                 </>
               )}
               <DialogClose>
-                <Button type="button" variant="secondary">
+                <Button type="button" variant="secondary" className="w-full">
                   Close
                 </Button>
               </DialogClose>
@@ -243,7 +242,7 @@ const MatkulCard = ({ data }) => {
             <DialogFooter>
                 {
                   userData.role === "Admin" && (
-                    <Link to="/">
+                    <Link to={`/matkul/${data.id}`}>
                       <Button variant="default">Edit Jadwal</Button>
                     </Link>
                   )

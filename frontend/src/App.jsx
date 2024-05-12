@@ -9,6 +9,7 @@ import { RegisterPage } from './pages/RegisterPage';
 import AuthProvider from '@/components/AuthProvider';
 import ProtectedRoute from './components/ProtectedRoute';
 import { MatkulPage } from "./pages/MatkulPage";
+import { JadwalPage } from "./pages/JadwalPage";
 
 
 const router = createBrowserRouter([{
@@ -33,6 +34,14 @@ const router = createBrowserRouter([{
   element: (
     <ProtectedRoute>
       <MatkulPage />
+    </ProtectedRoute>
+  ),
+},
+{
+  path: '/matkul/:id',
+  element: (
+    <ProtectedRoute>
+      <JadwalPage />
     </ProtectedRoute>
   ),
 },
