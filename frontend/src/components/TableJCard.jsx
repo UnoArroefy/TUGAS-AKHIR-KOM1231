@@ -1,6 +1,5 @@
-import React from 'react';
 import { useForm } from 'react-hook-form';
-
+import { useEffect, useState } from 'react';
 import {
   Table,
   TableBody,
@@ -20,6 +19,7 @@ export function TableJ({ data }) {
 
   const [user] = useAuth();
   const userData = jwtDecode(user.accessToken);
+  const [userJadwal, setUserJadwal] = useState([]);
   const { register, handleSubmit, formState: { isSubmitting } } = useForm();
 
   const addJadwal = async (data) => {
@@ -44,6 +44,29 @@ export function TableJ({ data }) {
     }
   };
 
+  const fetchJadwal = async () => {
+    console.log(userData.id);
+    try {
+      const response = await api.get(`/jadwal-mahasiswa/user/${userData.id}`, {
+        headers: {
+          Authorization: `Bearer ${user.accessToken}`
+        }
+      });
+      setUserJadwal(response.data);
+    } catch (error) {
+      console.log(error.response.data.message);
+    }
+  }
+
+  useEffect(() => {
+    if (user.accessToken) {
+      fetchJadwal();
+    }
+  }, [user]);
+
+
+  console.log(userJadwal.map((item) => item.id));
+  console.log(userJadwal);
   return (
     <Table>
       <TableCaption>A list of your recent jadwal.</TableCaption>
@@ -64,14 +87,16 @@ export function TableJ({ data }) {
             <TableCell>
               <form onSubmit={handleSubmit(addJadwal)}>
                 <input type="hidden" value={item.id} {...register('id')} />
-                <Button className="w-full" type="submit">
+                <Button className="w-full" type="submit" disabled={userJadwal.map((each) => each.jadwalId).includes(item.id)}>
                   {isSubmitting && (
                     <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
                   )}
-                  {isSubmitting ? "Loading..." : "Pilih"}
+                  {
+                      isSubmitting ? "Loading..." : userJadwal.map(each => each.jadwalId).includes(item.id) ? "Dipilih" : "Pilih"
+                  }
                 </Button>
               </form>
             </TableCell>
