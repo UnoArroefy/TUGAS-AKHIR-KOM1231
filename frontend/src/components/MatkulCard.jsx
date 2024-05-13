@@ -91,7 +91,9 @@ const MatkulCard = ({ data }) => {
       toast.success(response.data.message);
       setEdit(true);
     } catch (error) {
-      toast.error(error.response.data.message)
+      toast.error("Error occured", {
+        description: error.response?.data?.message ? error.response.data.message : "Something went wrong",
+      });
     }
   }
 

@@ -40,7 +40,17 @@ export const JadwalPage = () => {
             <div className="mt-4 mx-auto w-full max-w-4xl border rounded p-4">
                 <DataTable data={jadwal}/>
             </div>
-            <Toaster />
+            <Toaster
+                toastOptions={{
+                    unstyled: false,
+                    classNames: {
+                    error: 'bg-red-400',
+                    success: 'text-green-400',
+                    warning: 'text-yellow-400',
+                    info: 'bg-blue-400',
+                    },
+                }}
+            />
         </Layout>
     );
 };
