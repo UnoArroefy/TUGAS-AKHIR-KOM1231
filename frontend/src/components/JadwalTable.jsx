@@ -288,9 +288,7 @@ export const columns = [
 
 export function DataTable({data}) {
   const [sorting, setSorting] = React.useState([])
-  const [columnFilters, setColumnFilters] = React.useState(
-    []
-  )
+  const [columnFilters, setColumnFilters] = React.useState([])
   const [columnVisibility, setColumnVisibility] =
     React.useState({})
   const [rowSelection, setRowSelection] = React.useState({})

@@ -33,6 +33,7 @@ export const getJadwalMahasiswa = async (id) => {
                     ruangan: true,
                     mataKuliah: {
                         select: {
+                            id: true,
                             nama: true
                         }
                     }

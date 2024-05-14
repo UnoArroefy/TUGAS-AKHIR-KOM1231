@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 import { useAuth } from '@/components/AuthProvider'
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
+import { FormPost } from '@/components/FormPost'
 
 export const PostPage = () => {
 
@@ -18,8 +19,8 @@ export const PostPage = () => {
                     Authorization: `Bearer ${user.accessToken}`
                 }
             });
-            console.log(response.data);
             setData(response.data);
+            console.log(response.data);
         } catch (error) {
             console.log(error);
             toast.error("Error occured", {
@@ -37,9 +38,27 @@ export const PostPage = () => {
 
     return (
         <Layout >
-            <div className="flex justify-center px-20">
-            <Button> From Post </Button>
-            </div>
+            {
+                data.length > 0 ? (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                        {data.map((item, index) => (
+                            <div key={index} className="bg-white p-4 rounded-lg shadow-md">
+                                <h1 className="text-lg font-semibold">{item.title}</h1>
+                                <p className="text-sm text-gray-500">{item.content}</p>
+                            </div>
+                        ))}
+                    </div>
+                ) : (
+                    <div className="flex justify-center">
+                        <h1 className="text-lg font-semibold">No Post</h1>
+                    </div>
+                )
+            }
+            <FormPost>
+                <div className="flex justify-center px-20">
+                    <Button> Add Post </Button>
+                </div>
+            </FormPost>
             <Toaster
                 toastOptions={{
                     unstyled: false,

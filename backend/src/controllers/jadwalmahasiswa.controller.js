@@ -71,6 +71,23 @@ export const createJadwalMahasiswaController = async (req, res) => {
         return res.status(404).json({ message: "Jadwal already exists" });
     }
 
+    const jadwalMahasiswa = await getJadwalMahasiswa(value.mahasiswaId);
+
+    if (jadwalMahasiswa.length) {
+        for (let item of jadwalMahasiswa)
+        {
+            if (item.jadwal.hari === jadwal.hari) {
+                if (item.jadwal.jam === jadwal.jam) {
+                    return res.status(404).json({ message: "Jadwal already exists" });
+                }
+            }
+
+            if (item.jadwal.mataKuliah.id === jadwal.mataKuliahId) {
+                return res.status(404).json({ message: "Jadwal already exists" });
+            }
+        }
+    }
+
     try {
         await createJadwalMahasiswa(value);
         res.status(200).json({ message : "Jadwal created successfully "});

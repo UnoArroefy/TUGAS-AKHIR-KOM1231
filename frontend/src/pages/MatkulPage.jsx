@@ -37,12 +37,21 @@ export const MatkulPage = () => {
 
     return (
         <Layout >
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {data.map((item, index) => (
-                <MatkulCard key={index} data={item}/>
-            ))}
-            </div>
-            <FormMatkul user={user}>
+            { data.length > 0 ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    {
+                        data.map((item, index) => (
+                            <MatkulCard key={index} data={item}/>
+                        ))
+                    }
+                </div>
+                ) : (
+                    <div className="flex justify-center">
+                        <h1 className="text-lg font-semibold">No Mata Kuliah</h1>
+                    </div>
+                )
+            }
+            <FormMatkul >
                 <div className="flex justify-center px-20">
                     <Button> Add Mata Kuliah </Button>
                 </div>
