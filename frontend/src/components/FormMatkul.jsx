@@ -36,13 +36,23 @@ const schema = z.object({
         .max(6),
 });
 
+
+
 export const FormMatkul = ({children}) => {
+    const defaultValues = {
+        nama: "",
+        kode: "",
+        sks: "",
+    }
+
     const {
+        reset,
         register,
         handleSubmit,
         formState: { errors, isSubmitting },
       } = useForm({
         resolver: zodResolver(schema),
+        defaultValues,
     });
 
     const [user] = useAuth();
@@ -58,6 +68,7 @@ export const FormMatkul = ({children}) => {
             });
             toast.success(response.data.message);
             setEdit(true);
+            reset(defaultValues);
         } catch (error) {
             console.error(error);
         }

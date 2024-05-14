@@ -95,7 +95,7 @@ export const updateMahasiswaController = async (req, res) => {
             nama: value.nama,
             nim: value.nim,
             email: value.email,
-            password: await bcrypt.hash(value.newPassword, 10),
+            password: await bcrypt.hash(value.password, 10),
             role: value.role
         });
         return res.status(200).json({ message: "Mahasiswa updated successfully" });

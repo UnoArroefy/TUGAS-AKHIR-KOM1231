@@ -107,12 +107,12 @@ export function Layout({children}) {
             <DropdownMenuContent align="center">
               <DropdownMenuLabel align="center">My Account</DropdownMenuLabel>
               <DropdownMenuSeparator />
-                <Link to="/">
+                <Link to="/profile">
               <DropdownMenuItem>
                 Profile
               </DropdownMenuItem>
                 </Link>
-                <Link to="/">        
+                <Link to="/profile">        
               <DropdownMenuItem>
                 Settings
               </DropdownMenuItem>

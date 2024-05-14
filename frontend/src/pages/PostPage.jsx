@@ -29,7 +29,6 @@ export const PostPage = () => {
     };
 
     useEffect(() => {
-        console.log("use efec")
         document.title = "Post"
         if (user.accessToken) {
             fetchData();
