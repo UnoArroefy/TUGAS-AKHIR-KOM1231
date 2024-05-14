@@ -104,6 +104,12 @@ export const ProfilePage = () => {
                 navigate(0);
             }, 500);
         } catch (error) {
+            reset({
+                nama: Data.nama,
+                nim: Data.nim,
+                email: Data.email,
+                password: "",
+            });
             toast.error("Error occured", {
                 description: error.response?.data?.message ? error.response.data.message : "Something went wrong",
             });
