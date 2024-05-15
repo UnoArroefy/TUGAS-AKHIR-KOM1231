@@ -17,8 +17,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import api from "../api/axios";
 import { useAuth } from "./AuthProvider";
 import { toast } from "sonner";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 const schema = z.object({
     nama: z.string()
         .trim()
@@ -57,6 +58,7 @@ export const FormMatkul = ({children}) => {
 
     const [user] = useAuth();
     const [Edit, setEdit] = useState(false);
+    const [Role, setRole] = useState("");
     const navigate = useNavigate();
 
     const createMatkul = async (data) => {
@@ -70,10 +72,17 @@ export const FormMatkul = ({children}) => {
             setEdit(true);
             reset(defaultValues);
         } catch (error) {
-            console.error(error);
+            toast.error("Error occured", {
+                description: error.response?.data?.message ? error.response.data.message : "Something went wrong",
+            });
         }
-        console.log(data);
     }
+
+    useEffect(() => {
+        if (user.accessToken){
+            setRole(jwtDecode(user.accessToken).role);
+        }
+    }, [user]);
 
     return (
         <Dialog onOpenChange={
@@ -86,7 +95,9 @@ export const FormMatkul = ({children}) => {
         }
         >
             <DialogTrigger>
-                {children}
+                {
+                    Role !== "Admin" ?  null : children
+                }
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
@@ -152,7 +163,7 @@ export const FormMatkul = ({children}) => {
                         {isSubmitting ? "Adding..." : "Add Matkul"}
                     </Button>
                     <DialogClose>
-                    <Button type="button" variant="secondary">
+                    <Button type="button" variant="secondary" className="w-full">
                         Close
                     </Button>
                     </DialogClose>

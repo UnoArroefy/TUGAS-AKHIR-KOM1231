@@ -3,9 +3,9 @@ import { Layout } from '@/components/ui/layout'
 import api from "../api/axios"
 import { useEffect, useState } from 'react'
 import { useAuth } from '@/components/AuthProvider'
-import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
-import { FormPost } from '@/components/FormPost'
+import { FormPost } from '@/components/FormPost';
+import { PostCard } from '@/components/PostCard';
 
 export const PostPage = () => {
 
@@ -23,9 +23,6 @@ export const PostPage = () => {
             console.log(response.data);
         } catch (error) {
             console.log(error);
-            toast.error("Error occured", {
-                description: error.response?.data?.message ? error.response.data.message : "Something went wrong",
-            });
         }
     };
 
@@ -36,16 +33,15 @@ export const PostPage = () => {
         }
     },[user.accessToken]); 
 
+    console.log(data);
+
     return (
         <Layout >
             {
-                data.length > 0 ? (
+                data.length ? (
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                         {data.map((item, index) => (
-                            <div key={index} className="bg-white p-4 rounded-lg shadow-md">
-                                <h1 className="text-lg font-semibold">{item.title}</h1>
-                                <p className="text-sm text-gray-500">{item.content}</p>
-                            </div>
+                            <PostCard key={index} data={item}/>
                         ))}
                     </div>
                 ) : (
@@ -70,6 +66,7 @@ export const PostPage = () => {
                     },
                 }}
             />
+            {/* <ComboboxDemo /> */}
         </Layout>
     )
 }

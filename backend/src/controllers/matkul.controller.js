@@ -5,6 +5,7 @@ import {
     deleteMatkulbyId,
     updateMatkul
 } from "../services/matkul.service.js";
+import { getPostbyMatkul } from "../services/post.service.js";
 
 import {matkulFullValidation, matkulPartialValidation } from "../validations/matkul.validation.js";
 
@@ -52,6 +53,11 @@ export const deleteMatkulController = async (req, res) => {
     const matkul = await getMatkulbyId(id);
     if (!matkul) {
         return res.status(404).json({ message: "Matkul not found" });
+    }
+
+    const postMatkul = await getPostbyMatkul(id);
+    if (postMatkul.length) {
+        return res.status(404).json({ message: "Matkul has posts, cannot be deleted" });
     }
 
     try {
