@@ -37,7 +37,7 @@ import { jwtDecode } from "jwt-decode";
 import { Plus} from "lucide-react";
 
 const schema = z.object({
-    title: z.string().min(3).max(100)
+    title: z.string().min(3).max(50)
 });
 
 export const FormPost = ({children}) => {

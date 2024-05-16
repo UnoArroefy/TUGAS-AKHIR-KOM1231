@@ -8,7 +8,12 @@ export const createOfferValidation = (data) => {
             .required(),
         jadwalId: joi.array()
             .items(joi.string().trim().uuid())
-            .required(),
+            .min(1)
+            .required()
+            .messages({
+                'any.required': 'Jadwal is required',
+                'array.min': 'Jadwal is required' // Custom error message for min validation
+            }),
         mahasiswaId : joi.string()
             .trim()
             .uuid()

@@ -20,6 +20,7 @@ export const getPostAll = async () => {
                                 ruangan: true,
                                 mataKuliah: {
                                     select: {
+                                        id: true,
                                         nama: true,
                                         kode: true
                                     }
@@ -60,6 +61,7 @@ export const getPostofUser = async (id) => {
                             ruangan: true,
                             mataKuliah: {
                                 select: {
+                                    id: true,
                                     nama: true,
                                     kode: true
                                 }
@@ -107,6 +109,7 @@ export const getPostbyMatkul = async (id) => {
                             ruangan: true,
                             mataKuliah: {
                                 select: {
+                                    id: true,
                                     nama: true,
                                     kode: true
                                 }
@@ -148,6 +151,7 @@ export const getPostbySearch = async (search) => {
                             ruangan: true,
                             mataKuliah: {
                                 select: {
+                                    id: true,
                                     nama: true,
                                     kode: true
                                 }
@@ -187,6 +191,7 @@ export const getPostbyId = async (id) => {
                             ruangan: true,
                             mataKuliah: {
                                 select: {
+                                    id: true,
                                     nama: true,
                                     kode: true
                                 }

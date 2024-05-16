@@ -33,7 +33,8 @@ import { jwtDecode } from "jwt-decode";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { Badge } from "./ui/badge";
-import { ScrollArea } from "./ui/scroll-area";
+import { ScrollArea, ScrollBar } from "./ui/scroll-area";
+import { useForm } from "react-hook-form";
 
 export const PostCard = ({ data }) => {
 
@@ -44,6 +45,8 @@ export const PostCard = ({ data }) => {
   const [offer, setOffer] = useState([]);
   const [jadwal, setJadwal] = useState([]);
   const titleRef = useRef(null);
+
+  const { handleSubmit, formState: { isSubmitting } } = useForm();
 
   const deletePost = async () => {
     try {
@@ -87,22 +90,30 @@ export const PostCard = ({ data }) => {
     } catch (error) {
         console.log(error.response.data.message);
     }
-    }
+}
 
   const createOffer = async () => {
+
+    const postData = jadwal.filter(item => data.jadwal.map(item => item.jadwal.mataKuliah.id).includes(item.jadwal.mataKuliah.id)).map(item => item.id);
+    if (postData.length === 0) {
+        toast.error("Error occurred", { description: "You doesn't have jadwal for this matkul" });
+        return;
+    }
+
     try {
         const response = await api.post("/offer", {
             postId: data.id,
             mahasiswaId: userData.id,
-            // jadwalId: jadwal.map(item => item.id)
+            jadwalId: postData
         }, {
             headers: {
                 Authorization: `Bearer ${user.accessToken}`
             }
         });
         toast.success(response.data.message);
-        setEdit(true);
+        fetchOffer();
     } catch (error) {
+        console.log(error);
         toast.error("Error occured", {
             description: error.response.data.message,
         });
@@ -130,8 +141,6 @@ export const PostCard = ({ data }) => {
       return () => window.removeEventListener('resize', adjustFontSize);
   }, [data.title]);
 
-//   console.log("test data", jadwal, offer)
-
   return (
     <Dialog onOpenChange={
       () => {
@@ -142,24 +151,6 @@ export const PostCard = ({ data }) => {
       }
     }>
       <DialogTrigger >
-        {/* <div className="block w-full outline-0 focus:ring-2 hover:ring-2 ring-primary transition duration-300 rounded-lg">
-          <Card className="w-full rounded-lg border-2 shadow-md hover:shadow-lg">
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
-                <p className="font-semibold text-lg">{data.title}</p>
-                </div>
-              <Separator className="my-2" />
-              <p className="text-sm text-primary/80 mb-2 text-left">{data.jadwal[0].mahasiswa.nama}</p>
-              <div className="flex flex-wrap gap-1">
-                {
-                    data.jadwal.map((item, index) => (
-                        <Badge variant="secondary" key={index} className="text-xs px-2 py-0.5 text-gray-400">{item.jadwal.mataKuliah.kode}</Badge>
-                    ))
-                }
-              </div>
-            </CardContent>
-          </Card>
-        </div> */}
             <div className="block w-full outline-0 focus:ring-2 hover:ring-2 ring-primary transition duration-300 rounded-lg">
                 <Card className="w-full rounded-lg border-2 shadow-md hover:shadow-lg">
                     <CardContent className="p-4">
@@ -212,15 +203,18 @@ export const PostCard = ({ data }) => {
                     </TableRow>
                 ))}
                 </TableBody>
+                <ScrollBar className="z-20" />
                 </ScrollArea>
             </Table>        
             </div>
             <DialogFooter>
                 {
                     userData.id !== data.authorId ? (
-                        <Button>
-                          Tawar
-                        </Button> 
+                        <form onSubmit={handleSubmit(createOffer)}>
+                        <Button type="submit">
+                            Tawar
+                        </Button>
+                    </form>
                     ) : null
                 }
               {userData.role === "Admin" || userData.id === data.authorId ? (
@@ -249,22 +243,27 @@ export const PostCard = ({ data }) => {
                     <ScrollArea className="h-64">
                     <TableHeader className="sticky top-0 bg-background z-10">
                         <TableRow>
-                        <TableHead>Matkul</TableHead>
-                        <TableHead>Ruangan</TableHead>
-                        <TableHead>Hari</TableHead>
-                        <TableHead>Jam</TableHead>
+                        <TableHead>Nama</TableHead>
+                        <TableHead>Nim</TableHead>
+                        <TableHead className="text-center">Actions</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {data.jadwal.map((item) => (
+                        {offer.map((item) => (
                         <TableRow key={item.id}>
-                        <TableCell className="font-medium">{item.jadwal.mataKuliah.nama}</TableCell>
-                        <TableCell>{item.jadwal.ruangan}</TableCell>
-                        <TableCell>{item.jadwal.hari}</TableCell>
-                        <TableCell >{item.jadwal.jam}</TableCell>
+                        <TableCell className="font-medium">{item.mahasiswa.nama}</TableCell>
+                        <TableCell>{item.mahasiswa.nim}</TableCell>
+                        <TableCell >
+                            <Link>
+                                <Button className="w-full">
+                                    lihat
+                                </Button>
+                            </Link>
+                        </TableCell>
                         </TableRow>
                     ))}
                     </TableBody>
+                    <ScrollBar className="z-20" />
                     </ScrollArea>
                 </Table>  
             }
@@ -272,9 +271,11 @@ export const PostCard = ({ data }) => {
             <DialogFooter>
                 {
                 userData.id !== data.authorId ? (
-                        <Button onClick={() => console.log()}>
+                    <form onSubmit={handleSubmit(createOffer)}>
+                        <Button type="submit">
                             Tawar
-                        </Button> 
+                        </Button>
+                    </form>
                     ) : null
                 }
                 {userData.role === "Admin" || userData.id === data.authorId ? (

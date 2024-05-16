@@ -9,6 +9,27 @@ export const getJadwalMahasiswaById = async (id) => {
     const jadwal = await prisma.jadwalMahasiswa.findUnique({
         where: {
             id,
+        },
+        include: {
+            mahasiswa: {
+                select: {
+                    nama: true,
+                    nim: true
+                }
+            },
+            jadwal: {
+                select: {
+                    hari: true,
+                    jam: true,
+                    ruangan: true,
+                    mataKuliah: {
+                        select: {
+                            id: true,
+                            nama: true
+                        }
+                    }
+                }
+            }
         }
     });
     return jadwal;

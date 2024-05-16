@@ -71,6 +71,7 @@ export const createOfferController = async (req, res) => {
     }
 
     const jadwals = post.jadwal.map(jadwal => jadwal.id);
+    const matkuls = post.jadwal.map(jadwal => jadwal.jadwal.mataKuliah.id);
 
     for (let id of value.jadwalId) {
         const jadwal = await getJadwalMahasiswaById(id);
@@ -82,6 +83,9 @@ export const createOfferController = async (req, res) => {
         }
         if (jadwals.includes(id)) {
             return res.status(404).json({ message: "You can't offer the same jadwal" });
+        }
+        if (!matkuls.includes(jadwal.jadwal.mataKuliah.id)) {
+            return res.status(404).json({ message: "You can't offer jadwal with different mata kuliah" });
         }
     }
 

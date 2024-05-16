@@ -102,7 +102,7 @@ export function TableJ({ data }) {
             </TableRow>
           ))}
           </TableBody>
-          <ScrollBar className="hidden" />
+          <ScrollBar className="z-20" />
     </ScrollArea>
     </Table> 
   );
