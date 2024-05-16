@@ -37,7 +37,7 @@ import { jwtDecode } from "jwt-decode";
 import { Plus} from "lucide-react";
 
 const schema = z.object({
-    title: z.string().min(3).max(255)
+    title: z.string().min(3).max(100)
 });
 
 export const FormPost = ({children}) => {
@@ -81,6 +81,12 @@ export const FormPost = ({children}) => {
 
     const createPost = async (data) => {
         const userData = jwtDecode(user.accessToken);
+
+        if (postData.length === 0) {
+            toast.error("Error occurred", { description: "No jadwal found" });
+            return;
+        }
+
         try {
             const response = await api.post("/post", {
                 title: data.title,
