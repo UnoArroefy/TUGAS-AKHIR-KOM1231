@@ -77,7 +77,13 @@ export const getPostbyMatkul = async (id) => {
     const posts = await prisma.posts.findMany({
         where: {
             jadwal: {
-                matkulId: id,
+                some: {
+                    jadwal: {
+                        mataKuliah: {
+                          id
+                        }
+                    }
+                }
             }
         }, include: {
             author: {
