@@ -149,7 +149,7 @@ export const acceptOfferController = async (req, res) => {
     }
 
     try {
-        await deletePost(id);
+        await deletePost(offer.post.id);
         res.status(200).json({ message: "Offer accepted successfully "});
     } catch (error) {
         res.status(500).json({ message: "Internal Server Error " + error});

@@ -30,7 +30,7 @@ export const JadwalPage = () => {
             fetchJadwal();
         }
     }, [user]);
-    console.log(jadwal);
+
     return (
         <Layout>
             <h1 className="text-3xl font-bold text-center mb-4">
