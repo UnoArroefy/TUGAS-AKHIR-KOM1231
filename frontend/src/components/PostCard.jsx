@@ -291,10 +291,10 @@ const fetchMyOffer = async () => {
                         <TableRow key={item.id}>
                         <TableCell className="font-medium">{item.mahasiswa.nama}</TableCell>
                         <TableCell>{item.mahasiswa.nim}</TableCell>
-                        <TableCell >
+                        <TableCell>
                           {
                             userData.id === item.mahasiswaId ? (
-                              <Button variant="destructive" onClick={() => {deleteOffer(item.id); }}>
+                              <Button variant="destructive" className="w-full" onClick={() => {deleteOffer(item.id); }}>
                                 Cancel
                               </Button>
                             ) :

@@ -28,7 +28,7 @@ model Mahasiswa {
 model MataKuliah {
   id     String             @id @default(uuid())
   nama   String             @unique
-  kode   String             @unique
+  kode   String
   sks    Int
   jadwal JadwalMataKuliah[]
 }
