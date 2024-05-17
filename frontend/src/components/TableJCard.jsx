@@ -72,7 +72,7 @@ export function TableJ({ data }) {
       <ScrollArea className="h-64"> 
       <TableHeader className="sticky top-0 bg-background z-10">
         <TableRow>
-          <TableHead className="">Ruangan</TableHead>
+          <TableHead>Ruangan</TableHead>
           <TableHead>Hari</TableHead>
           <TableHead>Jam</TableHead>
           <TableHead className="text-center">Pilih Jadwal</TableHead>
