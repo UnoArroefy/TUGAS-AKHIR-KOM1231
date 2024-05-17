@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button'
-import { useState } from "react";
+<<<<<<< Updated upstream
+import { useState, useEffect } from "react";
 import FullCalendar, { formatDate } from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -16,15 +17,40 @@ import {
 import { useAuth } from '@/components/AuthProvider';
 import { jwtDecode } from 'jwt-decode';
 import { Layout } from '@/components/ui/layout';
+import api from "../api/axios";
+=======
+import { useEffect } from 'react'
+import { useAuth } from '@/components/AuthProvider'
+import { jwtDecode } from 'jwt-decode'
+import { Layout } from '@/components/ui/layout'
 
+>>>>>>> Stashed changes
 
 export const HomePage = () => {
+    
+    const [user] = useAuth();
+    const [jadwal, setJadwal] = useState([]);
+    
+    const fetchJadwal = async () => {
+        const userData = jwtDecode(user.accessToken);
+        try {
+            const response = await api.get(`/jadwal-mahasiswa/user/${userData.id}`, {
+                headers: {
+                    Authorization: `Bearer ${user.accessToken}`
+                }
+            });
+            setJadwal(response.data);
+        } catch (error) {
+            console.log(error.response.data.message);
+        }
+    }
+    
     useEffect(() => {
         document.title = "KRSans"
-    });
-
-    const [user] = useAuth();
-
+        if (user.accessToken) {
+            fetchJadwal();
+        }
+    }, [user]);
     const test = () => {
         console.log(jwtDecode(user.accessToken))
     }
