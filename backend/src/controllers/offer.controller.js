@@ -4,7 +4,8 @@ import {
     getOfferbyId,
     createOffer,
     deleteOffer,
-    checkOffer
+    checkOffer,
+    getOfferOfUser
 } from "../services/offer.service.js";
 import { deletePost, getPostbyId } from "../services/post.service.js";
 import { getMahasiswabyId } from "../services/mahasiswa.service.js";
@@ -34,6 +35,15 @@ export const getOfferbyIdController = async (req, res) => {
     const offer = await getOfferbyId(id);
     if (!offer) {
         return res.status(404).json({ message: "Offer not found" });
+    }
+    return res.status(200).json(offer);
+}
+
+export const getOfferofUserController = async (req, res) => {
+    const id = req.params.id;
+    const offer = await getOfferOfUser(id);
+    if (!offer.length) {
+        return res.status(404).json({ message: "User doesnt' have any offer" });
     }
     return res.status(200).json(offer);
 }

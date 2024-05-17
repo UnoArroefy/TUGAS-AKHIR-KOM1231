@@ -199,6 +199,73 @@ export const getOfferbyId = async (id) => {
     return offer;
 }
 
+export const getOfferOfUser = async (id) => {
+    const offer = await prisma.offer.findMany({
+        where: {
+            mahasiswaId: id,
+        }, include: {
+            mahasiswa: {
+                select: {
+                    nama: true,
+                    nim: true
+                }
+            },
+            post: {
+                include: {
+                    jadwal: {
+                        select: {
+                            id: true,
+                            mahasiswa: {
+                                select: {
+                                    nama: true,
+                                    nim: true
+                                }
+                            },
+                            jadwal: {
+                                select: {
+                                    hari: true,
+                                    jam: true,
+                                    ruangan: true,
+                                    mataKuliah: {
+                                        select: {
+                                            nama: true
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            jadwal: {
+                select: {
+                    id: true,
+                    mahasiswa: {
+                        select: {
+                            id: true,
+                            nama: true,
+                            nim: true
+                        }
+                    },
+                    jadwal: {
+                        select: {
+                            hari: true,
+                            jam: true,
+                            ruangan: true,
+                            mataKuliah: {
+                                select: {
+                                    nama: true
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }            
+    });
+    return offer;
+}
+
 export const checkOffer = async (mahasiswaId, postId) => {
     const offer = await prisma.offer.findFirst({
         where: {

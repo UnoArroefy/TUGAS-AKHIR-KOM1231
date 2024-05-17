@@ -43,6 +43,7 @@ export const PostCard = ({ data }) => {
   const [Edit, setEdit] = useState(false);
   const navigate = useNavigate();
   const [offer, setOffer] = useState([]);
+  const [userOffer, setUserOffer] = useState([]);
   const [jadwal, setJadwal] = useState([]);
   const titleRef = useRef(null);
 
@@ -76,6 +77,7 @@ export const PostCard = ({ data }) => {
         setOffer(response.data);
     } catch (error) {
         console.log(error.response.data.message)
+        setOffer([]);
     }  
   };
 
@@ -89,6 +91,19 @@ export const PostCard = ({ data }) => {
         setJadwal(response.data);
     } catch (error) {
         console.log(error.response.data.message);
+    }
+}
+
+const fetchMyOffer = async () => {
+    try {
+        const response = await api.get(`/offer/user/${userData.id}`, {
+            headers: {
+                Authorization: `Bearer ${user.accessToken}`
+            }
+        });
+        setUserOffer(response.data);
+    } catch (error) {
+      console.log(error.response.data.message);
     }
 }
 
@@ -113,7 +128,22 @@ export const PostCard = ({ data }) => {
         toast.success(response.data.message);
         fetchOffer();
     } catch (error) {
-        console.log(error);
+        toast.error("Error occured", {
+            description: error.response.data.message,
+        });
+    }
+  }
+
+  const deleteOffer = async (id) => {
+    try {
+        const response = await api.delete(`/offer/${id}`, {
+            headers: {
+                Authorization: `Bearer ${user.accessToken}`
+            }
+        });
+        toast.success(response.data.message);
+        fetchOffer();
+    } catch (error) {
         toast.error("Error occured", {
             description: error.response.data.message,
         });
@@ -123,6 +153,7 @@ export const PostCard = ({ data }) => {
   useEffect(() => {
       fetchOffer();
       fetchJadwal();
+      fetchMyOffer();
 
       const adjustFontSize = () => {
         const titleElement = titleRef.current;
@@ -211,14 +242,14 @@ export const PostCard = ({ data }) => {
                 {
                     userData.id !== data.authorId ? (
                         <form onSubmit={handleSubmit(createOffer)}>
-                        <Button type="submit">
-                        {isSubmitting && (
-                        <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                        )}
-                        {isSubmitting ? "Menawar..." : "Tawar"}
+                        <Button type="submit"  disabled={ userOffer.map(item => item.postId).includes(data.id) }>
+                          {isSubmitting && (
+                          <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                          </svg>
+                          )}
+                          {isSubmitting ? "Menawar..." : userOffer.map(item => item.postId).includes(data.id)  ? "Sabar" : "Tawar"}
                         </Button>
                     </form>
                     ) : null
@@ -261,9 +292,16 @@ export const PostCard = ({ data }) => {
                         <TableCell className="font-medium">{item.mahasiswa.nama}</TableCell>
                         <TableCell>{item.mahasiswa.nim}</TableCell>
                         <TableCell >
+                          {
+                            userData.id === item.mahasiswaId ? (
+                              <Button variant="destructive" onClick={() => {deleteOffer(item.id); }}>
+                                Cancel
+                              </Button>
+                            ) :
                             <Button onClick={()=>navigate(`/offer/${item.id}`)} className="w-full" disabled={data.authorId !== userData.id}>
                                 lihat
                             </Button>
+                          }
                         </TableCell>
                         </TableRow>
                         ))
@@ -275,22 +313,23 @@ export const PostCard = ({ data }) => {
             }
             </div>
             <DialogFooter>
-                {
-                userData.id !== data.authorId ? (
-                    <form onSubmit={handleSubmit(createOffer)}>
-                        <Button type="submit">
-                            {isSubmitting && (
-                            <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
-                            )}
-                            {isSubmitting ? "Menawar..." : "Tawar"}
+             {
+                    userData.id !== data.authorId ? (
+                        <form onSubmit={handleSubmit(createOffer)}>
+                        <Button type="submit"  disabled={ userOffer.map(item => item.postId).includes(data.id) }>
+                          {isSubmitting && (
+                          <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                          </svg>
+                          )}
+                          {isSubmitting ? "Menawar..." : userOffer.map(item => item.postId).includes(data.id)  ? "Sabar" : "Tawar"}
                         </Button>
                     </form>
                     ) : null
                 }
-                {userData.role === "Admin" || userData.id === data.authorId ? (
+                {
+                userData.role === "Admin" || userData.id === data.authorId ? (
                     <Button variant="destructive" onClick={(event) => { event.preventDefault(); deletePost(); }}>
                         Delete
                     </Button> 
