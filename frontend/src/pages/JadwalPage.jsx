@@ -4,7 +4,6 @@ import { useParams } from "react-router-dom";
 import api from "../api/axios";
 import { useAuth } from "@/components/AuthProvider";
 import { DataTable } from "../components/JadwalTable";
-import { Toaster } from "@/components/ui/sonner";
 
 export const JadwalPage = () => {
     const [user] = useAuth();
@@ -40,17 +39,6 @@ export const JadwalPage = () => {
             <div className="mt-4 mx-auto w-full max-w-4xl border rounded p-4">
                 <DataTable data={jadwal}/>
             </div>
-            <Toaster
-                toastOptions={{
-                    unstyled: false,
-                    classNames: {
-                    error: 'bg-red-400',
-                    success: 'text-green-400',
-                    warning: 'text-yellow-400',
-                    info: 'bg-blue-400',
-                    },
-                }}
-            />
         </Layout>
     );
 };

@@ -3,7 +3,6 @@ import { Layout } from '@/components/ui/layout';
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/components/AuthProvider';
 import { toast } from "sonner";
-import { Toaster } from "@/components/ui/sonner";
 import MatkulCard from '@/components/MatkulCard';
 import api from "../api/axios";
 import { FormMatkul } from '@/components/FormMatkul';
@@ -120,17 +119,6 @@ export const MatkulPage = () => {
                     <Button> Add Mata Kuliah </Button>
                 </FormMatkul>
             </div>
-            <Toaster
-                toastOptions={{
-                    unstyled: false,
-                    classNames: {
-                        error: 'bg-red-400',
-                        success: 'text-green-400',
-                        warning: 'text-yellow-400',
-                        info: 'bg-blue-400',
-                    },
-                }}
-            />
         </Layout>
     );
 };

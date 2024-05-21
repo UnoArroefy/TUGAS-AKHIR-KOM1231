@@ -3,7 +3,6 @@ import { Layout } from '@/components/ui/layout'
 import api from "../api/axios"
 import { useEffect, useState } from 'react'
 import { useAuth } from '@/components/AuthProvider'
-import { Toaster } from "@/components/ui/sonner";
 import { FormPost } from '@/components/FormPost';
 import { PostCard } from '@/components/PostCard';
 import { toast } from "sonner";
@@ -153,17 +152,6 @@ export const PostPage = () => {
                     <Button> Add Post </Button>
                 </FormPost>
             </div>
-            <Toaster
-                toastOptions={{
-                    unstyled: false,
-                    classNames: {
-                    error: 'bg-red-400',
-                    success: 'text-green-400',
-                    warning: 'text-yellow-400',
-                    info: 'bg-blue-400',
-                    },
-                }}
-            />
         </Layout>
     )
 }

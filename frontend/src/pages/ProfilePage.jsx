@@ -7,7 +7,6 @@ import { CardContent, CardFooter, Card } from "@/components/ui/card"
 import { useAuth } from '@/components/AuthProvider'
 import { jwtDecode } from 'jwt-decode'
 import { toast } from "sonner"
-import { Toaster } from '@/components/ui/sonner'
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -188,17 +187,6 @@ export const ProfilePage = () => {
                     </Card>
                 </div>
             </div>
-            <Toaster
-                toastOptions={{
-                    unstyled: false,
-                    classNames: {
-                        error: 'bg-red-400',
-                        success: 'text-green-400',
-                        warning: 'text-yellow-400',
-                        info: 'bg-blue-400',
-                    },
-                }}
-            />
         </Layout>
     )
 }

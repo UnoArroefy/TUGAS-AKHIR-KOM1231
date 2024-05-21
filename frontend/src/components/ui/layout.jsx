@@ -10,6 +10,7 @@ import { jwtDecode } from "jwt-decode"
 import { Bell, BellDot, X } from "lucide-react"
 import { Popover, PopoverTrigger, PopoverContent } from "./popover"
 import { toast } from "sonner"
+import { Toaster } from "./sonner"
 
 export function Layout({children}) {
 
@@ -98,7 +99,7 @@ export function Layout({children}) {
 
   return (
     (<div className="flex min-h-screen w-full flex-col">
-      <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
+      <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6 z-10">
         <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
           <Link className="flex items-center gap-2 text-lg font-semibold md:text-base cursor-default">
             KRSans
@@ -161,13 +162,13 @@ export function Layout({children}) {
               </Button>
             </PopoverTrigger>
             <PopoverContent>
-              <div className="flex flex-col gap-2 p-4">
+              <div className="flex flex-col gap-2 p-2">
                 <h3 className="text-lg font-semibold">Notifications</h3>
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-2 ">
                   {
                     notif && notif.length > 0 ? 
                     notif.map((item, i) => (
-                      <div key={i} className="flex items-center gap-2 p-2 rounded-lg">
+                      <div key={i} className="flex border items-center gap-2 p-2 rounded-lg">
                         <div 
                           className="flex-wrap cursor-text p-2 rounded-md shadow transition-colors"
                         >
@@ -184,6 +185,12 @@ export function Layout({children}) {
                     <span>There's no notification</span>
                   }
                 </div>
+                  {
+                    notif && notif.length > 0 &&
+                    <Button onClick={deleteAllUserNotif} variant="ghost" className="hover:bg-red-500 w-full">
+                      Clear
+                    </Button>
+                  }
               </div>
             </PopoverContent>
           </Popover>
@@ -220,6 +227,17 @@ export function Layout({children}) {
       </header>
       <main className="flex min-h-[calc(100vh_-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
         {children}
+        <Toaster
+            toastOptions={{
+                unstyled: false,
+                classNames: {
+                error: 'bg-red-400',
+                success: 'text-green-400',
+                warning: 'text-yellow-400',
+                info: 'bg-blue-400',
+                },
+            }}
+        />
       </main>
     </div>)
   );

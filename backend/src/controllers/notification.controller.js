@@ -38,8 +38,8 @@ export const deleteNotificationAllController = async (req, res) => {
     if (!notification.length) {
         return res.status(404).json({ message: "Notification not found" });
     }
-    
-    if (user.role !== "Admin" && user.id !== notification.mahasiswaId) {
+
+    if (user.role !== "Admin" && user.id !== notification[0].mahasiswaId) {
         return res.status(403).json({ message: "Forbidden" });
     }
 

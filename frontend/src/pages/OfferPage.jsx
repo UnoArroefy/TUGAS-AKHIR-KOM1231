@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../api/axios";
 import { useAuth } from "@/components/AuthProvider";
-import { Toaster } from "@/components/ui/sonner";
 import {
     Table,
     TableBody,
@@ -142,17 +141,6 @@ export const OfferPage = () => {
                     Decline Offer
                 </Button>
             </div>
-            <Toaster
-                toastOptions={{
-                    unstyled: false,
-                    classNames: {
-                    error: 'bg-red-400',
-                    success: 'text-green-400',
-                    warning: 'text-yellow-400',
-                    info: 'bg-blue-400',
-                    },
-                }}
-            />
         </Layout>
     );
 };

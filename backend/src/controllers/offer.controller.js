@@ -128,7 +128,7 @@ export const deleteOfferController = async (req, res) => {
         await deleteOffer(id);
         await pushNotification({
             mahasiswaId: offer.post.authorId,
-            content: `Offer for "${offer.post.title}" has been canceled`
+            content: `"${offer.mahasiswa.nama}" cancel offer for "${offer.post.title}"`
         });
         res.status(200).json({ message: "Offer deleted successfully "});
     } catch (error) {
