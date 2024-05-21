@@ -126,6 +126,10 @@ export const deleteOfferController = async (req, res) => {
 
     try {
         await deleteOffer(id);
+        await pushNotification({
+            mahasiswaId: offer.post.authorId,
+            content: `Offer for "${offer.post.title}" has been canceled`
+        });
         res.status(200).json({ message: "Offer deleted successfully "});
     } catch (error) {
         res.status(500).json({ message: "Internal Server Error " + error});

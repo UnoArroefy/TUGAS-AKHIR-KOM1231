@@ -127,11 +127,13 @@ const fetchMyOffer = async () => {
         });
         toast.success(response.data.message);
         fetchOffer();
+        fetchMyOffer();
     } catch (error) {
         toast.error("Error occured", {
             description: error.response.data.message,
         });
     }
+
   }
 
   const deleteOffer = async (id) => {
@@ -143,11 +145,12 @@ const fetchMyOffer = async () => {
         });
         toast.success(response.data.message);
         fetchOffer();
-    } catch (error) {
+      } catch (error) {
         toast.error("Error occured", {
-            description: error.response.data.message,
+          description: error.response.data.message,
         });
-    }
+      }
+      setUserOffer([]);
   }
 
   useEffect(() => {
@@ -249,7 +252,7 @@ const fetchMyOffer = async () => {
                               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                           </svg>
                           )}
-                          {isSubmitting ? "Menawar..." : userOffer.map(item => item.postId).includes(data.id)  ? "Sabar" : "Tawar"}
+                          {isSubmitting ? "Menawar..." : userOffer.map(item => item.postId).includes(data.id) && userOffer.length ? "Sabar" : "Tawar"}
                         </Button>
                     </form>
                     ) : null

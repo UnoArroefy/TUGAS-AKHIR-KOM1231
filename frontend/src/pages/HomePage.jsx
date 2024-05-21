@@ -82,7 +82,7 @@ export const HomePage = () => {
 
     return (
         <Layout>
-            <div className="container mx-auto px-4 py-8">
+            <div className="container mx-auto">
                 <h1 className="text-2xl font-semibold mb-4">Jadwal Mata Kuliah</h1>
                 <div className="overflow-x-auto">
                     <Table className="w-full table-fixed">
