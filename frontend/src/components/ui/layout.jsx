@@ -5,11 +5,14 @@ import { DropdownMenuTrigger, DropdownMenuLabel, DropdownMenuSeparator, Dropdown
 import ModeToggle from "../ModeToggle"
 import { useAuth } from "../AuthProvider";
 import api from "../../api/axios"
+import { useEffect, useState } from "react"
+import { jwtDecode } from "jwt-decode"
 
 export function Layout({children}) {
 
   const location = useLocation();
   const [user, setUser] = useAuth();
+  const [notif, setNotif] = useState([]);
   const navigate = useNavigate();
 
   const routes = [
@@ -40,6 +43,28 @@ export function Layout({children}) {
     setUser({});
     navigate("/login");
   }
+
+  const userNotif = () => {
+    const userData = jwtDecode(user.accessToken);
+    try {
+      const response = api.get(`/notification/${userData.id}`, {
+        headers: {
+          Authorization: `Bearer ${user.accessToken}`
+        }
+      });
+      setNotif(response.data);
+    } catch (error) {
+      console.log(error.response.data.message, "real in icuy");
+    }
+  }
+
+  useEffect(() => {
+    if (user.accessToken) {
+      userNotif();
+    }
+  }, [user]);
+
+  console.log(notif);
 
   return (
     (<div className="flex min-h-screen w-full flex-col">

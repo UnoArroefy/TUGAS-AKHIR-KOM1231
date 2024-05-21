@@ -12,6 +12,7 @@ import { getMahasiswabyId } from "../services/mahasiswa.service.js";
 import { getJadwalMahasiswaById } from "../services/jadwalmahasiswa.service.js";
 import { createOfferValidation } from "../validations/offer.validation.js";
 import { updateJadwalMahasiswa } from "../services/jadwalmahasiswa.service.js";
+import { pushNotification } from "../services/notification.service.js";
 
 export const getOfferAllController = async (req, res) => {
     const offer = await getOfferAll();
@@ -101,6 +102,10 @@ export const createOfferController = async (req, res) => {
 
     try {
         await createOffer(value);
+        await pushNotification({
+            mahasiswaId: post.authorId,
+            content: `New offer for ${post.title} has been created by ${mahasiswa.nama}`
+        });
         res.status(200).json({ message: "Offer created successfully "});
     } catch (error) {
         res.status(500).json({ message: `Internal Server Error:  + ${error}`});
@@ -158,8 +163,14 @@ export const acceptOfferController = async (req, res) => {
         }
     }
 
+
+
     try {
         await deletePost(offer.post.id);
+        await pushNotification({
+            mahasiswaId: penawar,
+            content: `Offer for ${offer.post.title} has been accepted by the author`
+        });
         res.status(200).json({ message: "Offer accepted successfully "});
     } catch (error) {
         res.status(500).json({ message: "Internal Server Error " + error});

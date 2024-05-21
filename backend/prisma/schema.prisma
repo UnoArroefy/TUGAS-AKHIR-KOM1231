@@ -14,15 +14,16 @@ datasource db {
 }
 
 model Mahasiswa {
-  id       String            @id @default(uuid())
-  nama     String
-  nim      String            @unique
-  email    String            @unique
-  password String
-  role     role              @default(User)
-  jadwal   JadwalMahasiswa[]
-  posts    Posts[]
-  offer    offer[]
+  id           String            @id @default(uuid())
+  nama         String
+  nim          String            @unique
+  email        String            @unique
+  password     String
+  role         role              @default(User)
+  jadwal       JadwalMahasiswa[]
+  posts        Posts[]
+  offer        offer[]
+  notification notification[]
 }
 
 model MataKuliah {
@@ -74,6 +75,14 @@ model offer {
   postId      String
 
   @@unique([mahasiswaId, postId])
+}
+
+model notification {
+  id          String    @id @default(uuid())
+  content     String
+  createdAt   DateTime  @default(now())
+  mahasiswa   Mahasiswa @relation(fields: [mahasiswaId], references: [id], onDelete: Cascade)
+  mahasiswaId String
 }
 
 enum role {

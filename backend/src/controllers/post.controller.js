@@ -33,7 +33,7 @@ export const getPostbyMatkulController = async (req, res) => {
     const kode = req.params.kode;
 
     const matkul = await getMatkulbyKode(kode);
-    if (!matkul) {
+    if (!matkul.length) {
         return res.status(404).json({ message: "Mata Kuliah not found" });
     }
     const posts = await getPostbyMatkul(matkul.id);
