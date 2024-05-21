@@ -7,6 +7,9 @@ import { useAuth } from "../AuthProvider";
 import api from "../../api/axios"
 import { useEffect, useState } from "react"
 import { jwtDecode } from "jwt-decode"
+import { Bell, BellDot, X } from "lucide-react"
+import { Popover, PopoverTrigger, PopoverContent } from "./popover"
+import { toast } from "sonner"
 
 export function Layout({children}) {
 
@@ -44,17 +47,46 @@ export function Layout({children}) {
     navigate("/login");
   }
 
-  const userNotif = () => {
+  const userNotif = async () => {
     const userData = jwtDecode(user.accessToken);
     try {
-      const response = api.get(`/notification/${userData.id}`, {
+      const response = await api.get(`/notification/${userData.id}`, {
         headers: {
           Authorization: `Bearer ${user.accessToken}`
         }
       });
       setNotif(response.data);
     } catch (error) {
-      console.log(error.response.data.message, "real in icuy");
+      console.log(error.response.data.message);
+      setNotif([]);
+    }
+  }
+
+  const deleteNotification = async (id) => {
+    try {
+      await api.delete(`/notification/${id}`, {
+        headers: {
+          Authorization: `Bearer ${user.accessToken}`
+        }
+      });
+      userNotif();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const deleteAllUserNotif = async () => {
+    const userData = jwtDecode(user.accessToken);
+    try {
+      await api.delete(`/notification/user/${userData.id}`, {
+        headers: {
+          Authorization: `Bearer ${user.accessToken}`
+        }
+      });
+      setNotif([]);
+      toast.success("All notification has been deleted");
+    } catch (error) {
+      console.log(error.response.data.message);
     }
   }
 
@@ -63,8 +95,6 @@ export function Layout({children}) {
       userNotif();
     }
   }, [user]);
-
-  console.log(notif);
 
   return (
     (<div className="flex min-h-screen w-full flex-col">
@@ -119,6 +149,44 @@ export function Layout({children}) {
         </Sheet>
         <div className="flex-grow"></div>
         <div className="flex items-center gap-4 md:gap-2 lg:gap-4">
+          <Popover>
+            <PopoverTrigger>
+              <Button className="rounded-full" size="icon" variant="ghost">
+                {
+                  notif && notif.length>0 ? 
+                  <BellDot /> :
+                  <Bell />
+
+                }
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent>
+              <div className="flex flex-col gap-2 p-4">
+                <h3 className="text-lg font-semibold">Notifications</h3>
+                <div className="flex flex-col gap-2">
+                  {
+                    notif && notif.length > 0 ? 
+                    notif.map((item, i) => (
+                      <div key={i} className="flex items-center gap-2 p-2 rounded-lg">
+                        <div 
+                          className="flex-wrap cursor-text p-2 rounded-md shadow transition-colors"
+                        >
+                          {item.content}
+                        </div>
+                        <button 
+                          className="text-red-500 hover:text-red-700 ml-2" 
+                          onClick={() => deleteNotification(item.id)}
+                        >
+                          <X />
+                        </button>
+                      </div>
+                    )) : 
+                    <span>There's no notification</span>
+                  }
+                </div>
+              </div>
+            </PopoverContent>
+          </Popover>
           <span className="flex-shrink-0">
             <ModeToggle />
           </span>

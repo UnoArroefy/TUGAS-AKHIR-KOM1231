@@ -104,7 +104,7 @@ export const createOfferController = async (req, res) => {
         await createOffer(value);
         await pushNotification({
             mahasiswaId: post.authorId,
-            content: `New offer for ${post.title} has been created by ${mahasiswa.nama}`
+            content: `New offer for "${post.title}" by "${mahasiswa.nama}"`
         });
         res.status(200).json({ message: "Offer created successfully "});
     } catch (error) {
@@ -169,7 +169,7 @@ export const acceptOfferController = async (req, res) => {
         await deletePost(offer.post.id);
         await pushNotification({
             mahasiswaId: penawar,
-            content: `Offer for ${offer.post.title} has been accepted by the author`
+            content: `Offer for "${offer.post.title}" has been accepted by the author`
         });
         res.status(200).json({ message: "Offer accepted successfully "});
     } catch (error) {
