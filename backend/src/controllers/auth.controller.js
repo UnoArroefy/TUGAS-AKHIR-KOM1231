@@ -12,7 +12,6 @@ export const loginController = async (req, res, next) => {
     if (error) {
         return res.status(404).json({ message: `${error}` });
     }
-
     const mahasiswa = await getMahasiswabyEmail(value);
     if (!mahasiswa) {
         return res.status(404).json({ message: "Invalid email address" });
@@ -27,7 +26,6 @@ export const loginController = async (req, res, next) => {
     valid_tokens.add(token);
     res.status(200).json({ accessToken: token });
 }
-
 export const logoutController = async (req, res) => {
     const token = req.headers.authorization.split(" ")[1];
     valid_tokens.delete(token);
