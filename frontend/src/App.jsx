@@ -21,7 +21,7 @@ const router = createBrowserRouter([{
       <HomePage />
     </ProtectedRoute>
   ),
-  // errorElement: <Navigate to="/404" replace />,
+  errorElement: <Navigate to="/404" replace />,
 },
 {
   path: '/post',

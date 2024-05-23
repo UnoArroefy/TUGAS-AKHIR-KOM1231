@@ -12,6 +12,18 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import api from "../api/axios"
 import { useNavigate } from 'react-router-dom'
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+  } from "@/components/ui/alert-dialog"
+  
 
 const schema = z.object({
     nama: z.string()
@@ -36,7 +48,7 @@ const schema = z.object({
 
 export const ProfilePage = () => {
 
-    const [user] = useAuth();
+    const [user, setUser] = useAuth();
     const [Data, setData] = useState({});
     const [Edit, setEdit] = useState(false);
     const navigate = useNavigate();
@@ -81,7 +93,12 @@ export const ProfilePage = () => {
                     Authorization: `Bearer ${user.accessToken}`
                 }
             });
-            console.log(response.data);
+            window.localStorage.removeItem("accessToken");
+            setUser({});
+            toast.success("Account deleted successfully");
+            setTimeout(() => {
+                navigate("/login");
+            }, 500);
         } catch (error) {
             toast.error("Error occured", {
                 description: error.response?.data?.message ? error.response.data.message : "Something went wrong",
@@ -136,54 +153,79 @@ export const ProfilePage = () => {
                 </div>
                 <div className="col-span-12">
                     <Card >
-                        <form onSubmit={handleSubmit(updateAccout)}>
-                            <CardContent className="space-y-4">
-                                <div className="space-y-2 mt-4">
-                                    <Label htmlFor="nama">Name</Label>
-                                    <Input id="nama" disabled={!Edit} {...register("nama")} />
-                                    {
-                                        errors.nama && (
-                                            <p className="text-red-500 text-xs">{errors.nama.message}</p>
-                                        )
-                                    }
-                                </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="nim">NIM</Label>
-                                    <Input id="nim" disabled={!Edit} {...register("nim")} />
-                                    {
-                                        errors.nim && (
-                                            <p className="text-red-500 text-xs">{errors.nim.message}</p>
-                                        )
-                                    }
-                                </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="email">Email</Label>
-                                    <Input id="email" disabled={!Edit} {...register("email")} />
-                                    {errors.email && (
-                                        <p className="text-red-500 text-xs">{errors.email.message}</p>
-                                    )}
-                                </div>
-                                {Edit ? <div className="space-y-2">
-                                    <Label htmlFor="password">Password</Label>
-                                    <Input id="password" placeholder="New Secret" disabled={!Edit} {...register("password")} type="password"/>
-                                    {
-                                        errors.password && (
-                                            <p className="text-red-500 text-xs">{errors.password.message}</p>
-                                        )
-                                    }
-                                </div>: null}
-                            </CardContent>
-                            <CardFooter className="flex justify-end">
+                        <CardContent className="space-y-4">
+                            <div className="space-y-2 mt-4">
+                                <Label htmlFor="nama">Name</Label>
+                                <Input id="nama" disabled={!Edit} {...register("nama")} />
                                 {
-                                    !Edit ?
-                                        <Button onClick={() => setEdit(!Edit)}>Edit</Button> :
-                                        <div className="flex space-x-1">
-                                            <Button type="submit">Save</Button>
-                                            <Button variant="destructive" onClick={deleteAccount}>Delete</Button>
-                                        </div>
+                                    errors.nama && (
+                                        <p className="text-red-500 text-xs">{errors.nama.message}</p>
+                                    )
                                 }
-                            </CardFooter>
-                        </form>
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="nim">NIM</Label>
+                                <Input id="nim" disabled={!Edit} {...register("nim")} />
+                                {
+                                    errors.nim && (
+                                        <p className="text-red-500 text-xs">{errors.nim.message}</p>
+                                    )
+                                }
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="email">Email</Label>
+                                <Input id="email" disabled={!Edit} {...register("email")} />
+                                {errors.email && (
+                                    <p className="text-red-500 text-xs">{errors.email.message}</p>
+                                )}
+                            </div>
+                            {Edit ? <div className="space-y-2">
+                                <Label htmlFor="password">Password</Label>
+                                <Input id="password" placeholder="New Secret" disabled={!Edit} {...register("password")} type="password"/>
+                                {
+                                    errors.password && (
+                                        <p className="text-red-500 text-xs">{errors.password.message}</p>
+                                    )
+                                }
+                            </div>: null}
+                        </CardContent>
+                        <CardFooter className={`flex ${Edit ? 'justify-between' : 'justify-end'} items-center w-full`}>
+                                {!Edit ? (
+                                    <Button onClick={() => setEdit(!Edit)}>Edit</Button>
+                                ) : (
+                                    <>
+                                        <span
+                                            onClick={() => setEdit(!Edit)}
+                                            className="cursor-pointer text-gray-700 hover:underline hover:text-white ml-2"
+                                        >
+                                            Cancel
+                                        </span>
+                                        <div className='space-x-1 flex'>
+                                        <form onSubmit={handleSubmit(updateAccout)}>
+                                            <Button type="submit">Save</Button>
+                                        </form>
+                                        <AlertDialog>
+                                        <AlertDialogTrigger>
+                                        <Button variant="destructive">Delete</Button>
+                                        </AlertDialogTrigger>
+                                        <AlertDialogContent>
+                                            <AlertDialogHeader>
+                                            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                            <AlertDialogDescription>
+                                                This action cannot be undone. This will permanently delete your account
+                                                and remove your data from our servers.
+                                            </AlertDialogDescription>
+                                            </AlertDialogHeader>
+                                            <AlertDialogFooter>
+                                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                            <AlertDialogAction onClick={deleteAccount}>Continue</AlertDialogAction>
+                                            </AlertDialogFooter>
+                                        </AlertDialogContent>
+                                        </AlertDialog>
+                                        </div>
+                                    </>
+                                )}
+                        </CardFooter>
                     </Card>
                 </div>
             </div>

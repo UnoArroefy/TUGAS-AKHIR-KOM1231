@@ -11,6 +11,7 @@ import { Bell, BellDot, X } from "lucide-react"
 import { Popover, PopoverTrigger, PopoverContent } from "./popover"
 import { toast } from "sonner"
 import { Toaster } from "./sonner"
+import { ScrollArea, ScrollBar } from "./scroll-area"
 
 export function Layout({children}) {
 
@@ -167,21 +168,27 @@ export function Layout({children}) {
                 <div className="flex flex-col gap-2 ">
                   {
                     notif && notif.length > 0 ? 
-                    notif.map((item, i) => (
-                      <div key={i} className="flex border items-center gap-2 p-2 rounded-lg">
-                        <div 
-                          className="flex-wrap cursor-text p-2 rounded-md shadow transition-colors"
-                        >
-                          {item.content}
-                        </div>
-                        <button 
-                          className="text-red-500 hover:text-red-700 ml-2" 
-                          onClick={() => deleteNotification(item.id)}
-                        >
-                          <X />
-                        </button>
-                      </div>
-                    )) : 
+                    <ScrollArea className="h-64"> 
+                    {
+                        notif.map((item, i) => (
+                          <div key={i} className="flex border items-center gap-2 p-2 rounded-lg">
+                              <div 
+                                className="flex-wrap cursor-text p-2 rounded-md shadow transition-colors"
+                              >
+                                {item.content}
+                              </div>
+                              <button 
+                                className="text-red-500 hover:text-red-700 ml-2" 
+                                onClick={() => deleteNotification(item.id)}
+                              >
+                                <X />
+                              </button>
+                          </div>
+                        ))  
+                    }
+                  <ScrollBar className="z-20"/>
+                 </ScrollArea>
+                 :
                     <span>There's no notification</span>
                   }
                 </div>
@@ -189,8 +196,8 @@ export function Layout({children}) {
                     notif && notif.length > 0 &&
                     <Button onClick={deleteAllUserNotif} variant="ghost" className="hover:bg-red-500 w-full">
                       Clear
-                    </Button>
-                  }
+                      </Button>
+                    }
               </div>
             </PopoverContent>
           </Popover>
